@@ -10,6 +10,7 @@ public class Cozinha {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 30)
     private String nome;
 
     public Long getId() {

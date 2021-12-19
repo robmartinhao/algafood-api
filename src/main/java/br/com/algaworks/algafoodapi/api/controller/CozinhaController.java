@@ -1,9 +1,9 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
+import br.com.algaworks.algafoodapi.domain.model.CozinhasXmlWrapper;
 import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +21,11 @@ public class CozinhaController {
     @GetMapping
     public List<Cozinha> listar() {
         return cozinhaRepository.listar();
+    }
+
+    @GetMapping
+    public CozinhasXmlWrapper listarXml() {
+        return new CozinhasXmlWrapper(cozinhaRepository.listar());
     }
 
     @GetMapping("/{id}")

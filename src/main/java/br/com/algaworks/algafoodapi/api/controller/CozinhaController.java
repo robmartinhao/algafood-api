@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.controller;
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.model.CozinhasXmlWrapper;
 import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
+import br.com.algaworks.algafoodapi.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,6 +20,9 @@ public class CozinhaController {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
+
+    @Autowired
+    private CadastroCozinhaService cadastroCozinhaService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Cozinha> listar() {
@@ -42,8 +46,8 @@ public class CozinhaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-        return cozinhaRepository.adicionar(cozinha);
+    public Cozinha salvar(@RequestBody Cozinha cozinha) {
+        return cadastroCozinhaService.salvar(cozinha);
     }
 
     @PutMapping("/{id}")
@@ -53,7 +57,7 @@ public class CozinhaController {
         if (cozinhaEncontrada != null) {
             //cozinha.setNome(cozinha.getNome());
             BeanUtils.copyProperties(cozinha, cozinhaEncontrada, "id");
-            cozinhaRepository.adicionar(cozinhaEncontrada);
+            cozinhaRepository.salvar(cozinhaEncontrada);
             return ResponseEntity.ok(cozinhaEncontrada);
         }
         return ResponseEntity.notFound().build();

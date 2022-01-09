@@ -33,7 +33,6 @@ public class RestauranteController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante) {
         try {
             Restaurante restauranteEncontrado = restauranteService.salvar(restaurante);
@@ -42,4 +41,6 @@ public class RestauranteController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 }

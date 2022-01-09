@@ -3,7 +3,6 @@ package br.com.algaworks.algafoodapi.api.controller;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
-import br.com.algaworks.algafoodapi.domain.model.CozinhasXmlWrapper;
 import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.algaworks.algafoodapi.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
@@ -30,11 +29,6 @@ public class CozinhaController {
         return cozinhaRepository.listar();
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-    public CozinhasXmlWrapper listarXml() {
-        return new CozinhasXmlWrapper(cozinhaRepository.listar());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Cozinha> buscarPeloId(@PathVariable Long id) {
         Cozinha cozinha = cozinhaRepository.buscarPeloId(id);
@@ -56,9 +50,8 @@ public class CozinhaController {
         Cozinha cozinhaEncontrada = cozinhaRepository.buscarPeloId(id);
 
         if (cozinhaEncontrada != null) {
-            //cozinha.setNome(cozinha.getNome());
             BeanUtils.copyProperties(cozinha, cozinhaEncontrada, "id");
-            cozinhaRepository.salvar(cozinhaEncontrada);
+            cadastroCozinhaService.salvar(cozinhaEncontrada);
             return ResponseEntity.ok(cozinhaEncontrada);
         }
         return ResponseEntity.notFound().build();

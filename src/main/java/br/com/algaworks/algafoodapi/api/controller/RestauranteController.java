@@ -1,13 +1,12 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
+import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +30,16 @@ public class RestauranteController {
             return ResponseEntity.ok(restauranteEncontrado);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante) {
+        try {
+            Restaurante restauranteEncontrado = restauranteService.salvar(restaurante);
+            return ResponseEntity.status(HttpStatus.CREATED).body(restauranteEncontrado);
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -40,10 +40,9 @@ public class RestauranteService {
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(
                     String.format("Não existe um cadastro de estado com código %d", id));
-
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
-                    String.format("Estado de código %d não pode ser removido, pois está em uso", id));
+                    String.format("Estado de código %d não pode ser removida, pois está em uso", id));
         }
     }
 }

@@ -23,9 +23,11 @@ public class EstadoService {
         try {
             estadoRepository.remover(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format("Não existe um cadastro de estado com código %d", id));
+            throw new EntidadeNaoEncontradaException(
+                    String.format("Não existe um cadastro de estado com código %d", id));
         } catch (DataIntegrityViolationException e) {
-            throw new EntidadeEmUsoException(String.format("Estado de código %d não pode ser removida, pois está em uso", id));
+            throw new EntidadeEmUsoException(
+                    String.format("Estado de código %d não pode ser removida, pois está em uso", id));
         }
     }
 }

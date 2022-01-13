@@ -40,10 +40,6 @@ public class CidadeService {
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(
                     String.format("Não existe um cadastro de cidade com código %d", cidadeId));
-
-        } catch (DataIntegrityViolationException e) {
-            throw new EntidadeEmUsoException(
-                    String.format("Cidade de código %d não pode ser removida, pois está em uso", cidadeId));
         }
     }
 }

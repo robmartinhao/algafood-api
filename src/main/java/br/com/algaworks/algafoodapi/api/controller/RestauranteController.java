@@ -66,15 +66,14 @@ public class RestauranteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Restaurante> remover(@PathVariable Long id) {
+    public ResponseEntity<?> remover(@PathVariable Long id) {
         try {
             restauranteService.excluir(id);
             return ResponseEntity.noContent().build();
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.noContent().build();
-
         } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 }

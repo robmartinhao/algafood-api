@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.controller;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Cidade;
+import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.repository.CidadeRepository;
 import br.com.algaworks.algafoodapi.domain.service.CidadeService;
 import org.springframework.beans.BeanUtils;
@@ -38,20 +39,28 @@ public class CidadeController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Cidade adicionar(@RequestBody Cidade cidade) {
-        return cidadeService.salvar(cidade);
+    public ResponseEntity<?> salvar(@RequestBody Cidade cidade) {
+        try {
+            Cidade cidadeEncontrada = cidadeService.salvar(cidade);
+            return ResponseEntity.status(HttpStatus.CREATED).body(cidadeEncontrada);
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id")
-    public ResponseEntity<Cidade> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
-        Cidade cidadeEncontrada = cidadeRepository.buscarPeloId(id);
-        if (cidadeEncontrada != null) {
-            BeanUtils.copyProperties(cidade, cidadeEncontrada, "id");
-            Cidade cidadeSalva = cidadeService.salvar(cidadeEncontrada);
-            return ResponseEntity.ok(cidadeSalva);
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
+        try {
+            Cidade cidadeEncontrada = cidadeRepository.buscarPeloId(id);
+            if (cidadeEncontrada != null) {
+                BeanUtils.copyProperties(cidade, cidadeEncontrada, "id");
+                Cidade cidadeSalva = cidadeService.salvar(cidadeEncontrada);
+                return ResponseEntity.ok(cidadeSalva);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
@@ -62,9 +71,6 @@ public class CidadeController {
 
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
-
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 }

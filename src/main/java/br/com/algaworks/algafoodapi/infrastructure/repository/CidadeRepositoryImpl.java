@@ -2,6 +2,7 @@ package br.com.algaworks.algafoodapi.infrastructure.repository;
 
 import br.com.algaworks.algafoodapi.domain.model.Cidade;
 import br.com.algaworks.algafoodapi.domain.repository.CidadeRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ public class CidadeRepositoryImpl implements CidadeRepository {
     private EntityManager manager;
 
     @Override
-    public List<Cidade> todas() {
+    public List<Cidade> listar() {
         return manager.createQuery("from Cidade", Cidade.class).getResultList();
     }
 
@@ -27,14 +28,17 @@ public class CidadeRepositoryImpl implements CidadeRepository {
 
     @Override
     @Transactional
-    public Cidade adicionar(Cidade cidade) {
+    public Cidade salvar(Cidade cidade) {
         return manager.merge(cidade);
     }
 
     @Override
     @Transactional
-    public void remover(Cidade cidade) {
-        cidade = buscarPeloId(cidade.getId());
+    public void remover(Long id) {
+        Cidade cidade = buscarPeloId(id);
+        if (cidade == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
         manager.remove(cidade);
     }
 }

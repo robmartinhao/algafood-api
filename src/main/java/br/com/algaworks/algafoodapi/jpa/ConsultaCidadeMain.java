@@ -18,7 +18,7 @@ public class ConsultaCidadeMain {
 
         CidadeRepository cidadeRepository = applicationContext.getBean(CidadeRepository.class);
 
-        List<Cidade> todasCidades = cidadeRepository.todas();
+        List<Cidade> todasCidades = cidadeRepository.listar();
 
         for (Cidade cidade : todasCidades) {
             System.out.printf("%s - %s\n", cidade.getNome(), cidade.getEstado().getNome());

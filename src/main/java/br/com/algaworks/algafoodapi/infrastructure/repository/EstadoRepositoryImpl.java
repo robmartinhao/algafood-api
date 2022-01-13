@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.infrastructure.repository;
 import br.com.algaworks.algafoodapi.domain.model.Cidade;
 import br.com.algaworks.algafoodapi.domain.model.Estado;
 import br.com.algaworks.algafoodapi.domain.repository.EstadoRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,14 +29,17 @@ public class EstadoRepositoryImpl implements EstadoRepository {
 
     @Override
     @Transactional
-    public Estado adicionar(Estado estado) {
+    public Estado salvar(Estado estado) {
         return manager.merge(estado);
     }
 
     @Override
     @Transactional
-    public void remover(Estado estado) {
-        estado = buscarPeloId(estado.getId());
+    public void remover(Long id) {
+        Estado estado = buscarPeloId(id);
+        if (estado == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
         manager.remove(estado);
     }
 }

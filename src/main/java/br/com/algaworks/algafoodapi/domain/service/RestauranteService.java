@@ -1,14 +1,15 @@
 package br.com.algaworks.algafoodapi.domain.service;
 
+import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class RestauranteService {
@@ -18,14 +19,6 @@ public class RestauranteService {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
-
-    public List<Restaurante> listar() {
-        return restauranteRepository.listar();
-    }
-
-    public Restaurante buscarPeloId(Long id) {
-        return restauranteRepository.buscarPeloId(id);
-    }
 
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
@@ -38,5 +31,19 @@ public class RestauranteService {
         }
         restaurante.setCozinha(cozinha);
         return restauranteRepository.salvar(restaurante);
+    }
+
+    public void excluir(Long id) {
+        try {
+            restauranteRepository.remover(id);
+
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(
+                    String.format("Não existe um cadastro de estado com código %d", id));
+
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(
+                    String.format("Estado de código %d não pode ser removido, pois está em uso", id));
+        }
     }
 }

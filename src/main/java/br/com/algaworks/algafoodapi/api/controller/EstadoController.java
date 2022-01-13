@@ -1,11 +1,15 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
+import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
+import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Estado;
 import br.com.algaworks.algafoodapi.domain.repository.EstadoRepository;
+import br.com.algaworks.algafoodapi.domain.service.EstadoService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,8 +20,51 @@ public class EstadoController {
     @Autowired
     private EstadoRepository estadoRepository;
 
+    @Autowired
+    private EstadoService estadoService;
+
     @GetMapping
     public List<Estado> listar() {
         return estadoRepository.listar();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Estado> buscarPeloId(@PathVariable Long id) {
+        Estado estadoEncontrado = estadoRepository.buscarPeloId(id);
+        if (estadoEncontrado != null) {
+            return ResponseEntity.ok(estadoEncontrado);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Estado salvar(@RequestBody Estado estado) {
+        return estadoService.salvar(estado);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Estado> atualizar(@PathVariable Long id, @RequestBody Estado estado) {
+        Estado estadoEncontrado = estadoRepository.buscarPeloId(id);
+
+        if (estadoEncontrado != null) {
+            BeanUtils.copyProperties(estado, estadoEncontrado, "id");
+            Estado estadoSalvo = estadoService.salvar(estadoEncontrado);
+            return ResponseEntity.ok(estadoSalvo);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Estado> remover(@PathVariable Long id) {
+        try {
+            estadoService.excluir(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.noContent().build();
+
+        } catch (EntidadeEmUsoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }

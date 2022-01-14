@@ -48,7 +48,7 @@ public class CidadeController {
         }
     }
 
-    @PutMapping("/{id")
+    @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
         try {
             Cidade cidadeEncontrada = cidadeRepository.buscarPeloId(id);

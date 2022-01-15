@@ -20,7 +20,7 @@ public class AlteracaoCozinhaMain {
         cozinha1.setId(1L);
         cozinha1.setNome("Brasileira");
 
-        cozinhaRepository.salvar(cozinha1);
+        cozinhaRepository.save(cozinha1);
 
     }
 }

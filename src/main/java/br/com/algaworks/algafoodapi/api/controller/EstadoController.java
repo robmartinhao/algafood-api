@@ -61,8 +61,9 @@ public class EstadoController {
         try {
             estadoService.excluir(id);
             return ResponseEntity.noContent().build();
+
         } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.notFound().build();
 
         } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

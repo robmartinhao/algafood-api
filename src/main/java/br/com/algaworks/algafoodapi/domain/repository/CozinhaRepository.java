@@ -7,7 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CozinhaRepository extends JpaRepository<Cozinha,Long> {
 
-
-
     //List<Cozinha> consultarPeloNome(String nome);
 }

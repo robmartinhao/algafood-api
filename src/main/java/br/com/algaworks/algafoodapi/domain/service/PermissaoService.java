@@ -21,7 +21,7 @@ public class PermissaoService {
 
     public void excluir(Long id) {
         try {
-            permissaoRepository.findById(id);
+            permissaoRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(
                     String.format("Não existe um cadastro de estado com código %d", id));

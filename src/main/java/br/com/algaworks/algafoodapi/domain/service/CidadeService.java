@@ -24,7 +24,7 @@ public class CidadeService {
         Long estadoId = cidade.getEstado().getId();
         Optional<Estado> estadoEncontrado = estadoRepository.findById(estadoId);
 
-        if (estadoEncontrado.isPresent()) {
+        if (!estadoEncontrado.isPresent()) {
             throw new EntidadeNaoEncontradaException(
                     String.format("Não existe cadastro de estado com código %d", estadoId)
             );

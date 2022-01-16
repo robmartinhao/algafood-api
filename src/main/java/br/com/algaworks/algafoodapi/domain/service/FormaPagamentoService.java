@@ -21,7 +21,7 @@ public class FormaPagamentoService {
 
     public void excluir(Long id) {
         try {
-            formaPagamentoRepository.findById(id);
+            formaPagamentoRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(
                     String.format("Não existe um cadastro de estado com código %d", id));

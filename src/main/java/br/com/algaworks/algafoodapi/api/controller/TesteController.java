@@ -6,7 +6,9 @@ import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -75,5 +77,15 @@ public class TesteController {
     @GetMapping("restaurantes/count-por-cozinha")
     public int restauranteCountPorCozinha(Long cozinhaId) {
         return restauranteRepository.countByCozinhaId(cozinhaId);
+    }
+
+    @GetMapping("restaurantes/por-nome-e-taxa-frete")
+    public ResponseEntity<List<Restaurante>> restaurantesPorNomeFrete(String nome,BigDecimal taxaInicial, BigDecimal taxaFinal) {
+        List<Restaurante> restaurantesEncontrados = restauranteRepository.find(nome, taxaInicial, taxaFinal);
+
+        if (restaurantesEncontrados != null) {
+            return ResponseEntity.ok(restaurantesEncontrados);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

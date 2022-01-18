@@ -54,7 +54,7 @@ public class TesteController {
 
     @GetMapping("restaurantes/por-nome")
     public ResponseEntity<List<Restaurante>> buscarPorNome(String nome, Long cozinhaId) {
-        List<Restaurante> restaurantesEncontrados = restauranteRepository.findByNomeContainingAndCozinhaId(nome, cozinhaId);
+        List<Restaurante> restaurantesEncontrados = restauranteRepository.consultarPorNome(nome, cozinhaId);
 
         if (restaurantesEncontrados != null) {
             return ResponseEntity.ok(restaurantesEncontrados);

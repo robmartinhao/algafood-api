@@ -1,6 +1,7 @@
 package br.com.algaworks.algafoodapi.infrastructure.repository;
 
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
+import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepositoryQueries;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 

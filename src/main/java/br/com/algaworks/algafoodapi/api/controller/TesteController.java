@@ -4,11 +4,11 @@ import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
+import br.com.algaworks.algafoodapi.infrastructure.spec.RestauranteComFreteGratisSpec;
+import br.com.algaworks.algafoodapi.infrastructure.spec.RestauranteComNomeSemelhanteSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -82,6 +82,19 @@ public class TesteController {
     @GetMapping("restaurantes/por-nome-e-taxa-frete")
     public ResponseEntity<List<Restaurante>> restaurantesPorNomeFrete(String nome,BigDecimal taxaInicial, BigDecimal taxaFinal) {
         List<Restaurante> restaurantesEncontrados = restauranteRepository.find(nome, taxaInicial, taxaFinal);
+
+        if (restaurantesEncontrados != null) {
+            return ResponseEntity.ok(restaurantesEncontrados);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("restaurantes/com-frete-gratis")
+    public ResponseEntity<List<Restaurante>> restaurantesComFreteGratis(@RequestParam String nome) {
+        var comFreteGratis = new RestauranteComFreteGratisSpec();
+        var comNomeSemelhante = new RestauranteComNomeSemelhanteSpec(nome);
+
+        List<Restaurante> restaurantesEncontrados = restauranteRepository.findAll(comFreteGratis.and(comNomeSemelhante));
 
         if (restaurantesEncontrados != null) {
             return ResponseEntity.ok(restaurantesEncontrados);

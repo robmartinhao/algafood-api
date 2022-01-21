@@ -19,8 +19,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static br.com.algaworks.algafoodapi.infrastructure.spec.RestauranteSpecs.comFreteGratis;
-import static br.com.algaworks.algafoodapi.infrastructure.spec.RestauranteSpecs.comNomeSemelhante;
+import static br.com.algaworks.algafoodapi.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
+import static br.com.algaworks.algafoodapi.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
 
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {

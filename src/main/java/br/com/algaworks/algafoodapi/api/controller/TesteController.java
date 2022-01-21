@@ -14,9 +14,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static br.com.algaworks.algafoodapi.infrastructure.spec.RestauranteSpecs.comFreteGratis;
-import static br.com.algaworks.algafoodapi.infrastructure.spec.RestauranteSpecs.comNomeSemelhante;
-
 @RestController
 @RequestMapping("/teste")
 public class TesteController {
@@ -101,5 +98,15 @@ public class TesteController {
             return ResponseEntity.ok(restaurantesEncontrados);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("restaurantes/primeiro")
+    public Optional<Restaurante> restaurantePrimeiro() {
+        return restauranteRepository.buscarPrimeiro();
+    }
+
+    @GetMapping("cozinhas/primeiro")
+    public Optional<Cozinha> cozinhasPrimeiro() {
+        return cozinhaRepository.buscarPrimeiro();
     }
 }

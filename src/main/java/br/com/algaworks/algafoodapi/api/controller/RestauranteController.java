@@ -14,7 +14,6 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,7 +30,12 @@ public class RestauranteController {
 
     @GetMapping
     public List<Restaurante> listar() {
-        return restauranteRepository.findAll();
+        List<Restaurante> restaurantes = restauranteRepository.findAll();
+
+        System.out.println("O nome da cozinha é ");
+        System.out.println(restaurantes.get(0).getCozinha().getNome());
+
+        return restaurantes;
     }
 
     @GetMapping("/{id}")

@@ -32,13 +32,8 @@ public class CozinhaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cozinha> buscarPeloId(@PathVariable Long id) {
-        Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
-
-        if (cozinha.isPresent()) {
-            return ResponseEntity.ok(cozinha.get());
-        }
-        return ResponseEntity.notFound().build();
+    public Cozinha buscarPeloId(@PathVariable Long id) {
+        return cozinhaService.buscarOuFalhar(id);
     }
 
     @PostMapping
@@ -48,34 +43,18 @@ public class CozinhaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cozinha> atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha) {
-        Optional<Cozinha> cozinhaEncontrada = cozinhaRepository.findById(id);
+    public Cozinha atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha) {
 
-        if (cozinhaEncontrada.isPresent()) {
-            BeanUtils.copyProperties(cozinha, cozinhaEncontrada.get(), "id");
-            Cozinha cozinhaSalva = cozinhaService.salvar(cozinhaEncontrada.get());
-            return ResponseEntity.ok(cozinhaSalva);
-        }
-        return ResponseEntity.notFound().build();
+        Cozinha cozinhaEncontrada = cozinhaService.buscarOuFalhar(id);
+
+        BeanUtils.copyProperties(cozinha, cozinhaEncontrada, "id");
+        Cozinha cozinhaSalva = cozinhaService.salvar(cozinhaEncontrada);
+        return cozinhaSalva;
     }
-
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Cozinha> remover(@PathVariable Long id) {
-//        try {
-//            cozinhaService.excluir(id);
-//            return ResponseEntity.noContent().build();
-//
-//        } catch (EntidadeNaoEncontradaException e) {
-//            return ResponseEntity.notFound().build();
-//
-//        } catch (EntidadeEmUsoException e) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//        }
-//    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {
-            cozinhaService.excluir(id);
+        cozinhaService.excluir(id);
     }
 }

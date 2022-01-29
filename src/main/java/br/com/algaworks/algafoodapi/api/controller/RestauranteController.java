@@ -1,8 +1,5 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
-import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
-import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
-import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import br.com.algaworks.algafoodapi.domain.service.RestauranteService;
@@ -10,14 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -49,8 +44,7 @@ public class RestauranteController {
     public Restaurante atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
         Restaurante restauranteEncontrado = restauranteService.buscarOuFalhar(id);
         BeanUtils.copyProperties(restaurante, restauranteEncontrado, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
-        Restaurante restauranteSalvo = restauranteService.salvar(restauranteEncontrado);
-        return restauranteSalvo;
+        return restauranteService.salvar(restauranteEncontrado);
     }
 
     @DeleteMapping("/{id}")
@@ -62,9 +56,7 @@ public class RestauranteController {
     @PatchMapping("/{id}")
     public Restaurante atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
         Restaurante restauranteEncontrado = restauranteService.buscarOuFalhar(id);
-
         merge(campos, restauranteEncontrado);
-
         return atualizar(id, restauranteEncontrado);
     }
 

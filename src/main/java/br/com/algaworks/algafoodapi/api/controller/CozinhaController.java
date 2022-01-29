@@ -1,20 +1,14 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
-import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
-import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.algaworks.algafoodapi.domain.service.CozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.server.ServerWebInputException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cozinhas")
@@ -47,8 +41,7 @@ public class CozinhaController {
         Cozinha cozinhaEncontrada = cozinhaService.buscarOuFalhar(id);
 
         BeanUtils.copyProperties(cozinha, cozinhaEncontrada, "id");
-        Cozinha cozinhaSalva = cozinhaService.salvar(cozinhaEncontrada);
-        return cozinhaSalva;
+        return cozinhaService.salvar(cozinhaEncontrada);
     }
 
     @DeleteMapping("/{id}")

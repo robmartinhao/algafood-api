@@ -1,18 +1,14 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
-import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
-import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Estado;
 import br.com.algaworks.algafoodapi.domain.repository.EstadoRepository;
 import br.com.algaworks.algafoodapi.domain.service.EstadoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/estados")
@@ -43,10 +39,8 @@ public class EstadoController {
     @PutMapping("/{id}")
     public Estado atualizar(@PathVariable Long id, @RequestBody Estado estado) {
         Estado estadoEncontrado = estadoService.buscarOuFalhar(id);
-
         BeanUtils.copyProperties(estado, estadoEncontrado, "id");
-        Estado estadoSalvo = estadoService.salvar(estadoEncontrado);
-        return estadoSalvo;
+        return estadoService.salvar(estadoEncontrado);
     }
 
     @DeleteMapping("/{id}")

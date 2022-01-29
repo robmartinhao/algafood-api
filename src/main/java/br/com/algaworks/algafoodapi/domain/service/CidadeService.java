@@ -1,7 +1,7 @@
 package br.com.algaworks.algafoodapi.domain.service;
 
+import br.com.algaworks.algafoodapi.domain.exception.CidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
-import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Cidade;
 import br.com.algaworks.algafoodapi.domain.model.Estado;
 import br.com.algaworks.algafoodapi.domain.repository.CidadeRepository;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CidadeService {
 
-    public static final String MSG_CIDADE_NAO_ENCONTRADO = "Não existe cadastro de cidade com código %d";
     public static final String MSG_CIDADE_EM_USO = "Não existe um cadastro de cidade com código %d";
     @Autowired
     private CidadeRepository cidadeRepository;
@@ -32,8 +31,7 @@ public class CidadeService {
         try {
             cidadeRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(
-                    String.format(MSG_CIDADE_NAO_ENCONTRADO, id));
+            throw new CidadeNaoEncontradaException(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     String.format(MSG_CIDADE_EM_USO, id));
@@ -42,8 +40,6 @@ public class CidadeService {
 
     public Cidade buscarOuFalhar(Long id) {
         return cidadeRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format(MSG_CIDADE_NAO_ENCONTRADO, id)
-                ));
+                .orElseThrow(() -> new CidadeNaoEncontradaException(id));
     }
 }

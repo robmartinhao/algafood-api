@@ -45,9 +45,9 @@ public class CidadeController {
 
     @PutMapping("/{id}")
     public Cidade atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
-        Cidade cidadeEncontrada = cidadeService.buscarOuFalhar(id);
-        BeanUtils.copyProperties(cidade, cidadeEncontrada, "id");
         try {
+            Cidade cidadeEncontrada = cidadeService.buscarOuFalhar(id);
+            BeanUtils.copyProperties(cidade, cidadeEncontrada, "id");
             return cidadeService.salvar(cidadeEncontrada);
 
         } catch (EstadoNaoEncontradoException e) {

@@ -24,7 +24,6 @@ public class CozinhaService {
         try {
             cozinhaRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-
             throw new CozinhaNaoEncontradaException(id);
 
         } catch (DataIntegrityViolationException e) {

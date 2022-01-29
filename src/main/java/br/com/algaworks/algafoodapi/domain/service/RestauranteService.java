@@ -4,7 +4,6 @@ import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
-import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,17 +13,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class RestauranteService {
 
+    public static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Não existe um cadastro de restaurante com código %d";
+    public static final String MSG_RESTAURANTE_EM_USO = "Estado de código %d não pode ser removida, pois está em uso";
     @Autowired
     private RestauranteRepository restauranteRepository;
 
     @Autowired
-    private CozinhaRepository cozinhaRepository;
+    private CozinhaService cozinhaService;
 
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
-        Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format("Não existe cadastro de cozinha com código %d", cozinhaId)));
+        Cozinha cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
         restaurante.setCozinha(cozinha);
         return restauranteRepository.save(restaurante);
     }
@@ -35,10 +34,17 @@ public class RestauranteService {
 
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(
-                    String.format("Não existe um cadastro de estado com código %d", id));
+                    String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id));
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
-                    String.format("Estado de código %d não pode ser removida, pois está em uso", id));
+                    String.format(MSG_RESTAURANTE_EM_USO, id));
         }
+    }
+
+    public Restaurante buscarOuFalhar(Long id) {
+        return restauranteRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                        String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id)
+                ));
     }
 }

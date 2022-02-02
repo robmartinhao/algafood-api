@@ -38,6 +38,10 @@ public class RestauranteController {
 
     @GetMapping("/{id}")
     public Restaurante buscarPeloId(@PathVariable Long id) {
+        if (true) {
+            throw new IllegalArgumentException("Teste");
+        }
+
         return restauranteService.buscarOuFalhar(id);
     }
 

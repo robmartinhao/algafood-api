@@ -1,6 +1,5 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
-import br.com.algaworks.algafoodapi.Groups;
 import br.com.algaworks.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +48,7 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante salvar(@RequestBody @Validated(Groups.CadastroRestaurante.class) Restaurante restaurante) {
+    public Restaurante salvar(@RequestBody @Valid Restaurante restaurante) {
         try {
             return restauranteService.salvar(restaurante);
         } catch (CozinhaNaoEncontradaException e) {

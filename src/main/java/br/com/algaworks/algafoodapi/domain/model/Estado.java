@@ -1,6 +1,6 @@
 package br.com.algaworks.algafoodapi.domain.model;
 
-import br.com.algaworks.algafoodapi.Groups;
+import br.com.algaworks.algafoodapi.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

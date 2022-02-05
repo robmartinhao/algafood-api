@@ -1,6 +1,6 @@
 package br.com.algaworks.algafoodapi.domain.model;
 
-import br.com.algaworks.algafoodapi.Groups;
+import br.com.algaworks.algafoodapi.core.validation.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;

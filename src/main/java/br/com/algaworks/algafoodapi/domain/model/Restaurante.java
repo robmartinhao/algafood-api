@@ -33,7 +33,7 @@ public class Restaurante {
     @Column(nullable = false)
     private String nome;
 
-    //@DecimalMin("0")
+    @NotNull
     @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
@@ -62,12 +62,10 @@ public class Restaurante {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"),
-                inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
+            inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
     private List<FormaPagamento> formasPagamento = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "restaurante")
     private List<Produto> produtos = new ArrayList<>();
-
-
 }

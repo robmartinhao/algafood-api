@@ -1,5 +1,7 @@
 package br.com.algaworks.algafoodapi;
 
+import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
+import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.service.CozinhaService;
 import org.junit.jupiter.api.Assertions;
@@ -40,6 +42,24 @@ public class CozinhaServiceIntegrationTests {
         ConstraintViolationException erroEsperado =
                 Assertions.assertThrows(ConstraintViolationException.class, () ->
                         cozinhaService.salvar(novaCozinha)
+                );
+        assertThat(erroEsperado).isNotNull();
+    }
+
+    @Test
+    public void deveFalhar_QuandoExcluirCozinhaEmUso() {
+        EntidadeEmUsoException erroEsperado =
+                Assertions.assertThrows(EntidadeEmUsoException.class, () ->
+                        cozinhaService.excluir(1L)
+                );
+        assertThat(erroEsperado).isNotNull();
+    }
+
+    @Test
+    public void deveFalhar_QuandoExcluirCozinhaInexistente() {
+        EntidadeNaoEncontradaException erroEsperado =
+                Assertions.assertThrows(EntidadeNaoEncontradaException.class, () ->
+                        cozinhaService.excluir(999999L)
                 );
         assertThat(erroEsperado).isNotNull();
     }

@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.exceptionhandler;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
+import br.com.algaworks.algafoodapi.domain.exception.ValidacaoException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -40,12 +41,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Autowired
     private MessageSource messageSouce;
 
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity<Object> handleValidacao(ValidacaoException ex, WebRequest request) {
+        return handleValidationInternal(ex, ex.getBindingResult(), HttpStatus.BAD_REQUEST,new HttpHeaders(), request);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getBindingResult(), headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult, HttpStatus status, HttpHeaders headers, WebRequest request) {
         ProblemType problemType = ProblemType.DADOS_INVALIDOS;
         String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 
-        BindingResult bindingResult = ex.getBindingResult();
         List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream()
                 .map(objectError -> {
                     String message = messageSouce.getMessage(objectError, LocaleContextHolder.getLocale());
@@ -66,7 +75,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .userMessage(detail)
                 .objects(problemObjects)
                 .build();
-
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 

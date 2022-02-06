@@ -22,7 +22,7 @@ public class CozinhaServiceIntegrationTests {
     CozinhaService cozinhaService;
 
     @Test
-    public void testarCadastroDeCozinhaComSucesso() {
+    public void deveAtribuirId_QuandoCadastrarCozinhaComDadosCorretos() {
         var novaCozinha = new Cozinha();
         novaCozinha.setNome("Chinesa");
 
@@ -33,7 +33,7 @@ public class CozinhaServiceIntegrationTests {
     }
 
     @Test
-    public void testarCadastroCozinhaSemNome() {
+    public void deveFalhar_QuandoCadastrarCozinhaSemNome() {
         var novaCozinha = new Cozinha();
         novaCozinha.setNome(null);
 

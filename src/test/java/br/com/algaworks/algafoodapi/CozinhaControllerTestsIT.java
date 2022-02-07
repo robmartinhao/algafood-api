@@ -2,9 +2,11 @@ package br.com.algaworks.algafoodapi;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -20,11 +22,16 @@ public class CozinhaControllerTestsIT {
     @LocalServerPort
     private int porta;
 
+    @Autowired
+    private Flyway flyway;
+
     @BeforeEach
     public void setUp() {
         enableLoggingOfRequestAndResponseIfValidationFails();
         port = porta;
         basePath = "/cozinhas";
+
+        flyway.migrate();
     }
 
     @Test

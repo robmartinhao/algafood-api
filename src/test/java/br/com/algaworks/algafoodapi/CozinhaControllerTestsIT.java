@@ -15,8 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import br.com.algaworks.algafoodapi.util.DatabaseCleaner;
 
 import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -68,6 +67,7 @@ public class CozinhaControllerTestsIT {
 
     @Test
     public void deveRetornarStatus201_QuandoCadastrarCozinha() {
+        enableLoggingOfRequestAndResponseIfValidationFails();
         given()
             .body("{ \"nome\" : \"Chinesa\" }")
                 .contentType(ContentType.JSON)
@@ -75,6 +75,31 @@ public class CozinhaControllerTestsIT {
                 .post()
             .then()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    public void deveRetornarRespostaEStatusCorreto_QuandoConsultarCozinhaExistente() {
+        enableLoggingOfRequestAndResponseIfValidationFails();
+        given()
+            .pathParam("cozinhaId", 2)
+            .accept(ContentType.JSON)
+        .when()
+            .get("/{cozinhaId}")
+        .then()
+            .statusCode(HttpStatus.OK.value())
+            .body("nome",equalTo("Americana"));
+    }
+
+    @Test
+    public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
+        enableLoggingOfRequestAndResponseIfValidationFails();
+        given()
+                .pathParam("cozinhaId", 2000)
+                .accept(ContentType.JSON)
+                .when()
+                .get("/{cozinhaId}")
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     private void prepararDados() {

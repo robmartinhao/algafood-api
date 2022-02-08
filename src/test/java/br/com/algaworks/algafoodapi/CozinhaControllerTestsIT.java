@@ -1,7 +1,8 @@
 package br.com.algaworks.algafoodapi;
 
+import br.com.algaworks.algafoodapi.domain.model.Cozinha;
+import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import io.restassured.http.ContentType;
-import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import br.com.algaworks.algafoodapi.util.DatabaseCleaner;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.hasItems;
@@ -25,7 +27,10 @@ public class CozinhaControllerTestsIT {
     private int porta;
 
     @Autowired
-    private Flyway flyway;
+    private DatabaseCleaner databaseCleaner;
+
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
 
     @BeforeEach
     public void setUp() {
@@ -33,7 +38,9 @@ public class CozinhaControllerTestsIT {
         port = porta;
         basePath = "/cozinhas";
 
-        flyway.migrate();
+        databaseCleaner.clearTables();
+
+        prepararDados();
     }
 
     @Test
@@ -48,15 +55,15 @@ public class CozinhaControllerTestsIT {
     }
 
     @Test
-    public void deveConter4Cozinhas_QuandoConsultarCozinhas() {
+    public void deveConter2Cozinhas_QuandoConsultarCozinhas() {
         enableLoggingOfRequestAndResponseIfValidationFails();
         given()
             .accept(ContentType.JSON)
         .when()
             .get()
         .then()
-            .body("", hasSize(4))
-            .body("nome", hasItems("Indiana", "Tailandesa"));
+            .body("", hasSize(2))
+            .body("nome", hasItems("Americana", "Tailandesa"));
     }
 
     @Test
@@ -68,5 +75,15 @@ public class CozinhaControllerTestsIT {
                 .post()
             .then()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+    private void prepararDados() {
+        var cozinha1 = new Cozinha();
+        cozinha1.setNome("Tailandesa");
+        cozinhaRepository.save(cozinha1);
+
+        var cozinha2 = new Cozinha();
+        cozinha2.setNome("Americana");
+        cozinhaRepository.save(cozinha2);
     }
 }

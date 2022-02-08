@@ -75,8 +75,9 @@ public class CozinhaControllerTestsIT {
     public void deveRetornarStatus201_QuandoCadastrarCozinha() {
         enableLoggingOfRequestAndResponseIfValidationFails();
         given()
-            .body(ResourceUtils.getContentFromResource(jsonCorretoCozinhaChinesa))
+            .body(jsonCorretoCozinhaChinesa)
                 .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
             .when()
                 .post()
             .then()
@@ -113,7 +114,7 @@ public class CozinhaControllerTestsIT {
         cozinhaTailandesa.setNome("Tailandesa");
         cozinhaRepository.save(cozinhaTailandesa);
 
-        var cozinhaAmericana = new Cozinha();
+        cozinhaAmericana = new Cozinha();
         cozinhaAmericana.setNome("Americana");
         cozinhaRepository.save(cozinhaAmericana);
 

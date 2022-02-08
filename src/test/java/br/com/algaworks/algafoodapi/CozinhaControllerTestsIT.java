@@ -46,7 +46,20 @@ public class CozinhaControllerTestsIT {
 
         databaseCleaner.clearTables();
         prepararDados();
-        jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource("/json/correto/cozinha-chinesa.json");
+        jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource(
+                "/json/correto/cozinha-chinesa.json");
+    }
+
+    @Test
+    public void deveRetornarStatus200_QaundoConsultarCozinha() {
+        enableLoggingOfRequestAndResponseIfValidationFails();
+        given()
+            .pathParam("cozinhaId", cozinhaAmericana.getId())
+            .accept(ContentType.JSON)
+        .when()
+            .get("/{cozinhaId}")
+        .then()
+            .statusCode(HttpStatus.OK.value());
     }
 
     @Test
@@ -76,12 +89,12 @@ public class CozinhaControllerTestsIT {
         enableLoggingOfRequestAndResponseIfValidationFails();
         given()
             .body(jsonCorretoCozinhaChinesa)
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
-            .when()
-                .post()
-            .then()
-                .statusCode(HttpStatus.CREATED.value());
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.CREATED.value());
     }
 
     @Test

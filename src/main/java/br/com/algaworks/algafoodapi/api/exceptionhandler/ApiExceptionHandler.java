@@ -48,7 +48,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getBindingResult(), headers, status, request);
+        return handleValidationInternal(ex, ex.getBindingResult(), status, headers, request);
     }
 
     private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult, HttpStatus status, HttpHeaders headers, WebRequest request) {

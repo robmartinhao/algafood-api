@@ -1,5 +1,6 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
+import br.com.algaworks.algafoodapi.api.dto.CozinhaDTO;
 import br.com.algaworks.algafoodapi.api.dto.RestauranteDTO;
 import br.com.algaworks.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -37,16 +39,15 @@ public class RestauranteController {
     private RestauranteRepository restauranteRepository;
 
     @GetMapping
-    public List<Restaurante> listar() {
-        return restauranteRepository.findAll();
+    public List<RestauranteDTO> listar() {
+        return toCollectionDTO(restauranteRepository.findAll());
     }
 
     @GetMapping("/{id}")
     public RestauranteDTO buscarPeloId(@PathVariable Long id) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(id);
-        RestauranteDTO restauranteModel = null;
 
-        return restauranteModel;
+        return toDTO(restaurante);
     }
 
     @Autowired
@@ -54,20 +55,20 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante salvar(@RequestBody @Valid Restaurante restaurante) {
+    public RestauranteDTO salvar(@RequestBody @Valid Restaurante restaurante) {
         try {
-            return restauranteService.salvar(restaurante);
+            return toDTO(restauranteService.salvar(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
     }
 
     @PutMapping("/{id}")
-    public Restaurante atualizar(@PathVariable Long id, @RequestBody @Valid Restaurante restaurante) {
+    public RestauranteDTO atualizar(@PathVariable Long id, @RequestBody @Valid Restaurante restaurante) {
         try {
             Restaurante restauranteEncontrado = restauranteService.buscarOuFalhar(id);
             BeanUtils.copyProperties(restaurante, restauranteEncontrado, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
-            return restauranteService.salvar(restauranteEncontrado);
+            return toDTO(restauranteService.salvar(restauranteEncontrado));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
@@ -80,11 +81,11 @@ public class RestauranteController {
     }
 
     @PatchMapping("/{id}")
-    public Restaurante atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos, HttpServletRequest request) {
+    public RestauranteDTO atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos, HttpServletRequest request) {
         Restaurante restauranteEncontrado = restauranteService.buscarOuFalhar(id);
         merge(campos, restauranteEncontrado, request);
         validate(restauranteEncontrado, "restaurante");
-        
+
         return atualizar(id, restauranteEncontrado);
     }
 
@@ -124,5 +125,25 @@ public class RestauranteController {
             Throwable rootCause = ExceptionUtils.getRootCause(e);
             throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
         }
+    }
+
+    private RestauranteDTO toDTO(Restaurante restaurante) {
+        CozinhaDTO cozinhaDTO = new CozinhaDTO();
+        cozinhaDTO.setId(restaurante.getCozinha().getId());
+        cozinhaDTO.setNome(restaurante.getCozinha().getNome());
+
+        RestauranteDTO restauranteDTO = new RestauranteDTO();
+        restauranteDTO.setId(restaurante.getId());
+        restauranteDTO.setNome(restaurante.getNome());
+        restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
+        restauranteDTO.setCozinha(cozinhaDTO);
+
+        return restauranteDTO;
+    }
+
+    private List<RestauranteDTO> toCollectionDTO(List<Restaurante> restaurantes) {
+        return restaurantes.stream()
+                .map(restaurante -> toDTO(restaurante))
+                .collect(Collectors.toList());
     }
 }

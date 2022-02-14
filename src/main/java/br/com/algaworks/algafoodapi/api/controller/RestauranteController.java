@@ -1,10 +1,13 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
+import br.com.algaworks.algafoodapi.api.model.dto.input.CozinhaIdInput;
+import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.CozinhaOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
 import br.com.algaworks.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.exception.ValidacaoException;
+import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import br.com.algaworks.algafoodapi.domain.service.RestauranteService;
@@ -40,14 +43,14 @@ public class RestauranteController {
 
     @GetMapping
     public List<RestauranteOutput> listar() {
-        return toCollectionOutput(restauranteRepository.findAll());
+        return toCollectionRestauranteOutput(restauranteRepository.findAll());
     }
 
     @GetMapping("/{id}")
     public RestauranteOutput buscarPeloId(@PathVariable Long id) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(id);
 
-        return toOutput(restaurante);
+        return toRestauranteOutput(restaurante);
     }
 
     @Autowired
@@ -55,20 +58,22 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestauranteOutput salvar(@RequestBody @Valid Restaurante restaurante) {
+    public RestauranteOutput salvar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
-            return toOutput(restauranteService.salvar(restaurante));
+            Restaurante restaurante = toDomainObject(restauranteInput);
+            return toRestauranteOutput(restauranteService.salvar(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
     }
 
     @PutMapping("/{id}")
-    public RestauranteOutput atualizar(@PathVariable Long id, @RequestBody @Valid Restaurante restaurante) {
+    public RestauranteOutput atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteInput restauranteInput) {
         try {
+            Restaurante restaurante = toDomainObject(restauranteInput);
             Restaurante restauranteEncontrado = restauranteService.buscarOuFalhar(id);
             BeanUtils.copyProperties(restaurante, restauranteEncontrado, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
-            return toOutput(restauranteService.salvar(restauranteEncontrado));
+            return toRestauranteOutput(restauranteService.salvar(restauranteEncontrado));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
@@ -86,7 +91,8 @@ public class RestauranteController {
         merge(campos, restauranteEncontrado, request);
         validate(restauranteEncontrado, "restaurante");
 
-        return atualizar(id, restauranteEncontrado);
+        RestauranteInput restauranteEncontradoInput = toRestauranteInput(restauranteEncontrado);
+        return atualizar(id, restauranteEncontradoInput);
     }
 
     private void validate(Restaurante restauranteEncontrado, String objectName) {
@@ -127,7 +133,7 @@ public class RestauranteController {
         }
     }
 
-    private RestauranteOutput toOutput(Restaurante restaurante) {
+    private RestauranteOutput toRestauranteOutput(Restaurante restaurante) {
         CozinhaOutput cozinhaOutput = new CozinhaOutput();
         cozinhaOutput.setId(restaurante.getCozinha().getId());
         cozinhaOutput.setNome(restaurante.getCozinha().getNome());
@@ -141,9 +147,35 @@ public class RestauranteController {
         return restauranteOutput;
     }
 
-    private List<RestauranteOutput> toCollectionOutput(List<Restaurante> restaurantes) {
+    private List<RestauranteOutput> toCollectionRestauranteOutput(List<Restaurante> restaurantes) {
         return restaurantes.stream()
-                .map(restaurante -> toOutput(restaurante))
+                .map(restaurante -> toRestauranteOutput(restaurante))
                 .collect(Collectors.toList());
+    }
+
+    private Restaurante toDomainObject(RestauranteInput restauranteInput) {
+        Restaurante restaurante = new Restaurante();
+        restaurante.setNome(restauranteInput.getNome());
+        restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
+
+        Cozinha cozinha = new Cozinha();
+        cozinha.setId(restauranteInput.getCozinha().getId());
+
+        restaurante.setCozinha(cozinha);
+
+        return restaurante;
+    }
+
+    private RestauranteInput toRestauranteInput(Restaurante restaurante) {
+        RestauranteInput restauranteInput = new RestauranteInput();
+        restauranteInput.setNome(restaurante.getNome());
+        restauranteInput.setTaxaFrete(restaurante.getTaxaFrete());
+
+        CozinhaIdInput cozinhaIdInput = new CozinhaIdInput();
+        cozinhaIdInput.setId(restaurante.getCozinha().getId());
+
+        restauranteInput.setCozinha(cozinhaIdInput);
+
+        return restauranteInput;
     }
 }

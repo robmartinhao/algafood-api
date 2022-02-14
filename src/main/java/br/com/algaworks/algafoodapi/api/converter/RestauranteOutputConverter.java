@@ -1,10 +1,9 @@
 package br.com.algaworks.algafoodapi.api.converter;
 
-import br.com.algaworks.algafoodapi.api.model.dto.input.CozinhaIdInput;
-import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
-import br.com.algaworks.algafoodapi.api.model.dto.output.CozinhaOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,18 +12,11 @@ import java.util.stream.Collectors;
 @Component
 public class RestauranteOutputConverter {
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public RestauranteOutput toRestauranteOutput(Restaurante restaurante) {
-        CozinhaOutput cozinhaOutput = new CozinhaOutput();
-        cozinhaOutput.setId(restaurante.getCozinha().getId());
-        cozinhaOutput.setNome(restaurante.getCozinha().getNome());
-
-        RestauranteOutput restauranteOutput = new RestauranteOutput();
-        restauranteOutput.setId(restaurante.getId());
-        restauranteOutput.setNome(restaurante.getNome());
-        restauranteOutput.setTaxaFrete(restaurante.getTaxaFrete());
-        restauranteOutput.setCozinha(cozinhaOutput);
-
-        return restauranteOutput;
+        return  modelMapper.map(restaurante, RestauranteOutput.class);
     }
 
     public List<RestauranteOutput> toCollectionRestauranteOutput(List<Restaurante> restaurantes) {

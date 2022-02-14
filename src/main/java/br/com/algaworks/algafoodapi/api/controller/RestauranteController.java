@@ -1,5 +1,6 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
+import br.com.algaworks.algafoodapi.api.converter.RestauranteDomainConverter;
 import br.com.algaworks.algafoodapi.api.converter.RestauranteInputConverter;
 import br.com.algaworks.algafoodapi.api.converter.RestauranteOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
@@ -46,6 +47,8 @@ public class RestauranteController {
     @Autowired
     private RestauranteInputConverter restauranteInputConverter;
 
+    @Autowired
+    private RestauranteDomainConverter restauranteDomainConverter;
 
     @GetMapping
     public List<RestauranteOutput> listar() {
@@ -66,7 +69,7 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.CREATED)
     public RestauranteOutput salvar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
-            Restaurante restaurante = toDomainObject(restauranteInput);
+            Restaurante restaurante = restauranteDomainConverter.toDomainObject(restauranteInput);
             return restauranteOutputConverter.toRestauranteOutput(restauranteService.salvar(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
@@ -76,7 +79,7 @@ public class RestauranteController {
     @PutMapping("/{id}")
     public RestauranteOutput atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteInput restauranteInput) {
         try {
-            Restaurante restaurante = toDomainObject(restauranteInput);
+            Restaurante restaurante = restauranteDomainConverter.toDomainObject(restauranteInput);
             Restaurante restauranteEncontrado = restauranteService.buscarOuFalhar(id);
             BeanUtils.copyProperties(restaurante, restauranteEncontrado, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
             return restauranteOutputConverter.toRestauranteOutput(restauranteService.salvar(restauranteEncontrado));
@@ -137,18 +140,5 @@ public class RestauranteController {
             Throwable rootCause = ExceptionUtils.getRootCause(e);
             throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
         }
-    }
-
-    private Restaurante toDomainObject(RestauranteInput restauranteInput) {
-        Restaurante restaurante = new Restaurante();
-        restaurante.setNome(restauranteInput.getNome());
-        restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
-
-        Cozinha cozinha = new Cozinha();
-        cozinha.setId(restauranteInput.getCozinha().getId());
-
-        restaurante.setCozinha(cozinha);
-
-        return restaurante;
     }
 }

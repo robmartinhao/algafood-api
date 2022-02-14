@@ -1,4 +1,4 @@
-package br.com.algaworks.algafoodapi.domain.model.mixin;
+package br.com.algaworks.algafoodapi.api.model.mixin;
 
 import br.com.algaworks.algafoodapi.domain.model.Estado;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

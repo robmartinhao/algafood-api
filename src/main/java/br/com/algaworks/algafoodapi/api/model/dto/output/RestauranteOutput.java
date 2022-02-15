@@ -11,9 +11,6 @@ public class RestauranteOutput {
 
     private Long id;
     private String nome;
-    private BigDecimal taxaFrete;
+    private BigDecimal precoFrete;
     private CozinhaOutput cozinha;
-
-    private String nomeCozinha;
-    private Long idCozinha;
 }

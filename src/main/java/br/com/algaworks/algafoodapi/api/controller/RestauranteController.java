@@ -1,8 +1,8 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
-import br.com.algaworks.algafoodapi.api.converter.RestauranteDomainConverter;
-import br.com.algaworks.algafoodapi.api.converter.RestauranteInputConverter;
-import br.com.algaworks.algafoodapi.api.converter.RestauranteOutputConverter;
+import br.com.algaworks.algafoodapi.api.converter.domain.RestauranteDomainConverter;
+import br.com.algaworks.algafoodapi.api.converter.input.RestauranteInputConverter;
+import br.com.algaworks.algafoodapi.api.converter.output.RestauranteOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
 import br.com.algaworks.algafoodapi.domain.exception.CozinhaNaoEncontradaException;

@@ -1,4 +1,4 @@
-package br.com.algaworks.algafoodapi.api.converter;
+package br.com.algaworks.algafoodapi.api.converter.input;
 
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;

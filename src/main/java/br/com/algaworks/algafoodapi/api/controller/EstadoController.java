@@ -1,9 +1,12 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
+import br.com.algaworks.algafoodapi.api.converter.domain.EstadoDomainConverter;
+import br.com.algaworks.algafoodapi.api.converter.output.EstadoOutputConverter;
+import br.com.algaworks.algafoodapi.api.model.dto.input.EstadoInput;
+import br.com.algaworks.algafoodapi.api.model.dto.output.EstadoOutput;
 import br.com.algaworks.algafoodapi.domain.model.Estado;
 import br.com.algaworks.algafoodapi.domain.repository.EstadoRepository;
 import br.com.algaworks.algafoodapi.domain.service.EstadoService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,27 +24,36 @@ public class EstadoController {
     @Autowired
     private EstadoService estadoService;
 
+    @Autowired
+    private EstadoOutputConverter estadoOutputConverter;
+
+    @Autowired
+    private EstadoDomainConverter estadoDomainConverter;
+
     @GetMapping
-    public List<Estado> listar() {
-        return estadoRepository.findAll();
+    public List<EstadoOutput> listar() {
+        return estadoOutputConverter.toCollectionEstadoOutput(estadoRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    public Estado buscarPeloId(@PathVariable Long id) {
-        return estadoService.buscarOuFalhar(id);
+    public EstadoOutput buscarPeloId(@PathVariable Long id) {
+        return estadoOutputConverter.toEstadoOutput(estadoService.buscarOuFalhar(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Estado salvar(@RequestBody @Valid Estado estado) {
-        return estadoService.salvar(estado);
+    public EstadoOutput salvar(@RequestBody @Valid EstadoInput estadoInput) {
+        Estado estado = estadoDomainConverter.toDomainObject(estadoInput);
+        return estadoOutputConverter.toEstadoOutput(estadoService.salvar(estado));
     }
 
     @PutMapping("/{id}")
-    public Estado atualizar(@PathVariable Long id, @RequestBody @Valid Estado estado) {
+    public EstadoOutput atualizar(@PathVariable Long id, @RequestBody @Valid EstadoInput estadoInput) {
         Estado estadoEncontrado = estadoService.buscarOuFalhar(id);
-        BeanUtils.copyProperties(estado, estadoEncontrado, "id");
-        return estadoService.salvar(estadoEncontrado);
+
+        estadoDomainConverter.copyToDomainObject(estadoInput, estadoEncontrado);
+        //BeanUtils.copyProperties(estado, estadoEncontrado, "id");
+        return estadoOutputConverter.toEstadoOutput(estadoService.salvar(estadoEncontrado));
     }
 
     @DeleteMapping("/{id}")

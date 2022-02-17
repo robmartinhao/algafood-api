@@ -1,22 +1,22 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
-import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
-import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
-import br.com.algaworks.algafoodapi.domain.model.Estado;
+import br.com.algaworks.algafoodapi.api.converter.domain.FormaPagamentoDomainConverter;
+import br.com.algaworks.algafoodapi.api.converter.output.FormaPagamentoOutputConverter;
+import br.com.algaworks.algafoodapi.api.model.dto.input.FormaPagamentoInput;
+import br.com.algaworks.algafoodapi.api.model.dto.output.FormaPagamentoOutput;
+import br.com.algaworks.algafoodapi.domain.exception.FormaDePagamentoNaoEncontradaException;
+import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.model.FormaPagamento;
 import br.com.algaworks.algafoodapi.domain.repository.FormaPagamentoRepository;
 import br.com.algaworks.algafoodapi.domain.service.FormaPagamentoService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/forma-pagamento")
+@RequestMapping("/formas-pagamento")
 public class FormaPagamentoController {
 
     @Autowired
@@ -25,49 +25,47 @@ public class FormaPagamentoController {
     @Autowired
     private FormaPagamentoService formaPagamentoService;
 
+    @Autowired
+    private FormaPagamentoOutputConverter formaPagamentoOutputConverter;
+
+    @Autowired
+    private FormaPagamentoDomainConverter formaPagamentoDomainConverter;
+
     @GetMapping
-    public List<FormaPagamento> listar() {
-        return formaPagamentoRepository.findAll();
+    public List<FormaPagamentoOutput> listar() {
+        return formaPagamentoOutputConverter.toCollectionFormaPagamentoOutput(formaPagamentoRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FormaPagamento> buscarPeloId(@PathVariable Long id) {
-        Optional<FormaPagamento> formaPagamentoEncontrada = formaPagamentoRepository.findById(id);
-        if (formaPagamentoEncontrada.isPresent()) {
-            return ResponseEntity.ok(formaPagamentoEncontrada.get());
-        }
-        return ResponseEntity.notFound().build();
+    public FormaPagamentoOutput buscarPeloId(@PathVariable Long id) {
+        return formaPagamentoOutputConverter.toFormaPagamentoOutput(formaPagamentoService.buscarOuFalhar(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public FormaPagamento salvar(@RequestBody FormaPagamento formaPagamento) {
-        return formaPagamentoService.salvar(formaPagamento);
+    public FormaPagamentoOutput salvar(@RequestBody FormaPagamentoInput formaPagamentoInput) {
+        FormaPagamento formaPagamento = formaPagamentoDomainConverter.toDomainObject(formaPagamentoInput);
+        return formaPagamentoOutputConverter.toFormaPagamentoOutput(formaPagamentoService.salvar(formaPagamento));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FormaPagamento> atualizar(@PathVariable Long id, @RequestBody FormaPagamento formaPagamento) {
-        Optional<FormaPagamento> formaPagamentoEncontrada = formaPagamentoRepository.findById(id);
+    public FormaPagamentoOutput atualizar(@PathVariable Long id, @RequestBody FormaPagamentoInput formaPagamentoInput) {
+        try {
+            FormaPagamento formaPagamentoEncontrada = formaPagamentoService.buscarOuFalhar(id);
 
-        if (formaPagamentoEncontrada.isPresent()) {
-            BeanUtils.copyProperties(formaPagamento, formaPagamentoEncontrada.get(), "id");
-            FormaPagamento formaPagamentoSalva = formaPagamentoService.salvar(formaPagamentoEncontrada.get());
-            return ResponseEntity.ok(formaPagamentoSalva);
+            formaPagamentoDomainConverter.copyToDomainObject(formaPagamentoInput, formaPagamentoEncontrada);
+
+            return formaPagamentoOutputConverter.toFormaPagamentoOutput(formaPagamentoService.salvar(formaPagamentoEncontrada));
+
+        } catch (FormaDePagamentoNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage(), e);
         }
-        return ResponseEntity.notFound().build();
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<FormaPagamento> remover(@PathVariable Long id) {
-        try {
-            formaPagamentoService.excluir(id);
-            return ResponseEntity.noContent().build();
-
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long id) {
+        formaPagamentoService.excluir(id);
     }
 }

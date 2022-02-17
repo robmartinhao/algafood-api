@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CidadeOutput {
+public class CidadeResumoOutput {
 
     private Long id;
     private String nome;
-    private EstadoOutput estado;
+    private String estado;
 }

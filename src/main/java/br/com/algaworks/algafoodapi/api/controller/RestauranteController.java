@@ -5,6 +5,7 @@ import br.com.algaworks.algafoodapi.api.converter.input.RestauranteInputConverte
 import br.com.algaworks.algafoodapi.api.converter.output.RestauranteOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
+import br.com.algaworks.algafoodapi.domain.exception.CidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.exception.ValidacaoException;
@@ -77,14 +78,12 @@ public class RestauranteController {
     @PutMapping("/{id}")
     public RestauranteOutput atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteInput restauranteInput) {
         try {
-            //Restaurante restaurante = restauranteDomainConverter.toDomainObject(restauranteInput);
             Restaurante restauranteEncontrado = restauranteService.buscarOuFalhar(id);
 
             restauranteDomainConverter.copyToDomainObject(restauranteInput, restauranteEncontrado);
-            //BeanUtils.copyProperties(restaurante, restauranteEncontrado, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
             return restauranteOutputConverter.toRestauranteOutput(restauranteService.salvar(restauranteEncontrado));
-        } catch (CozinhaNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
     }

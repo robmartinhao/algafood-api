@@ -1,6 +1,7 @@
 package br.com.algaworks.algafoodapi.api.converter.domain;
 
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
+import br.com.algaworks.algafoodapi.domain.model.Cidade;
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,10 @@ public class RestauranteDomainConverter {
         // Para evitar: org.hibernate.HibernateException: identifier of an instance of
         // br.com.algaworks.algafoodapi.domain.model.Cozinha was altered from 1 to 2
         restaurante.setCozinha(new Cozinha());
+        if (restaurante.getEndereco() != null) {
+            restaurante.getEndereco().setCidade(new Cidade());
+        }
+
         modelMapper.map(restauranteInput, restaurante);
     }
 }

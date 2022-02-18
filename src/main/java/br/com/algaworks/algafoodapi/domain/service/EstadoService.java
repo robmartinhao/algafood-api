@@ -1,7 +1,6 @@
 package br.com.algaworks.algafoodapi.domain.service;
 
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
-import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.EstadoNaoEncontradoException;
 import br.com.algaworks.algafoodapi.domain.model.Estado;
 import br.com.algaworks.algafoodapi.domain.repository.EstadoRepository;
@@ -15,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class EstadoService {
 
     public static final String MSG_ESTADO_EM_USO = "Estado de código %d não pode ser removida, pois está em uso";
+
     @Autowired
     private EstadoRepository estadoRepository;
 

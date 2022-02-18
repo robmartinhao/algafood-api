@@ -50,9 +50,8 @@ public class EstadoController {
     @PutMapping("/{id}")
     public EstadoOutput atualizar(@PathVariable Long id, @RequestBody @Valid EstadoInput estadoInput) {
         Estado estadoEncontrado = estadoService.buscarOuFalhar(id);
-
         estadoDomainConverter.copyToDomainObject(estadoInput, estadoEncontrado);
-        //BeanUtils.copyProperties(estado, estadoEncontrado, "id");
+
         return estadoOutputConverter.toEstadoOutput(estadoService.salvar(estadoEncontrado));
     }
 

@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PermissaoService {
 
+    public static final String MSG_PERMISSAO_EM_USO = "Permissão de código %d não pode ser removida, pois está em uso";
+
     @Autowired
     private PermissaoRepository permissaoRepository;
 
@@ -30,7 +32,7 @@ public class PermissaoService {
             throw new PermissaoNaoEncontradaException(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
-                    String.format("Estado de código %d não pode ser removida, pois está em uso", id));
+                    String.format(MSG_PERMISSAO_EM_USO, id));
         }
     }
 

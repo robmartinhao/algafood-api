@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CidadeService {
 
-    public static final String MSG_CIDADE_EM_USO = "Não existe um cadastro de cidade com código %d";
+    public static final String MSG_CIDADE_EM_USO = "Cidade de código %d não pode ser removida, pois está em uso";
     @Autowired
     private CidadeRepository cidadeRepository;
 

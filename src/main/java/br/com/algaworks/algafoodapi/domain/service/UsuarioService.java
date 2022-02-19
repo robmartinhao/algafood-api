@@ -1,6 +1,5 @@
 package br.com.algaworks.algafoodapi.domain.service;
 
-import br.com.algaworks.algafoodapi.api.model.dto.input.SenhaInput;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.EstadoNaoEncontradoException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
@@ -13,16 +12,27 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class UsuarioService {
 
     public static final String MSG_USUARIO_EM_USO = "Usuário de código %d não pode ser removido, pois está em uso";
+    public static final String MSG_EMAIL_EM_USO = "Já existe um usuário cadastrado com o e-mail %s";
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
+        usuarioRepository.detach(usuario);
+
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
+
+        if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
+            throw new NegocioException(String.format(MSG_EMAIL_EM_USO, usuario.getEmail()));
+        }
+
         return usuarioRepository.save(usuario);
     }
 

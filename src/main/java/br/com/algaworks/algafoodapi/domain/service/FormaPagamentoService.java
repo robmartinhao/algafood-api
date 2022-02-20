@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class FormaPagamentoService {
 
-    public static final String MSG_FORMA_PAGAMENTO_EM_USO = "Estado de código %d não pode ser removida, pois está em uso";
+    public static final String MSG_FORMA_PAGAMENTO_EM_USO = "Forma de Pagamento de código %d não pode ser removida, pois está em uso";
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
 

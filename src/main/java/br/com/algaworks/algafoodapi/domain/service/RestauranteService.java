@@ -2,10 +2,7 @@ package br.com.algaworks.algafoodapi.domain.service;
 
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.RestauranteNaoEncontradoException;
-import br.com.algaworks.algafoodapi.domain.model.Cidade;
-import br.com.algaworks.algafoodapi.domain.model.Cozinha;
-import br.com.algaworks.algafoodapi.domain.model.FormaPagamento;
-import br.com.algaworks.algafoodapi.domain.model.Restaurante;
+import br.com.algaworks.algafoodapi.domain.model.*;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

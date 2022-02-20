@@ -6,7 +6,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -19,7 +21,7 @@ public class FormaPagamentoOutputConverter {
         return modelMapper.map(formaPagamento, FormaPagamentoOutput.class);
     }
 
-    public List<FormaPagamentoOutput> toCollectionFormaPagamentoOutput(List<FormaPagamento> formasPagamentos) {
+    public List<FormaPagamentoOutput> toCollectionFormaPagamentoOutput(Collection<FormaPagamento> formasPagamentos) {
         return formasPagamentos.stream()
                 .map(this::toFormaPagamentoOutput)
                 .collect(Collectors.toList());

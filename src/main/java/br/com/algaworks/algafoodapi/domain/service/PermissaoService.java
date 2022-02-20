@@ -2,7 +2,9 @@ package br.com.algaworks.algafoodapi.domain.service;
 
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
+import br.com.algaworks.algafoodapi.domain.exception.GrupoNaoEncontradoException;
 import br.com.algaworks.algafoodapi.domain.exception.PermissaoNaoEncontradaException;
+import br.com.algaworks.algafoodapi.domain.model.Grupo;
 import br.com.algaworks.algafoodapi.domain.model.Permissao;
 import br.com.algaworks.algafoodapi.domain.repository.PermissaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +38,8 @@ public class PermissaoService {
         }
     }
 
+    public Permissao buscarOuFalhar(Long id) {
+        return permissaoRepository.findById(id)
+                .orElseThrow(() -> new PermissaoNaoEncontradaException(id));
+    }
 }

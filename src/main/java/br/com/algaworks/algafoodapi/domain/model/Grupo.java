@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -22,5 +22,13 @@ public class Grupo {
     @ManyToMany
     @JoinTable(name = "grupo_permissao", joinColumns = @JoinColumn(name = "grupo_id"),
                 inverseJoinColumns = @JoinColumn(name = "permissao_id"))
-    private List<Permissao> permissoes;
+    private Set<Permissao> permissoes;
+
+    public boolean adicionarPermissao(Permissao permissao) {
+        return getPermissoes().add(permissao);
+    }
+
+    public boolean removerPermissao(Permissao permissao) {
+        return getPermissoes().remove(permissao);
+    }
 }

@@ -5,10 +5,7 @@ import br.com.algaworks.algafoodapi.api.converter.input.RestauranteInputConverte
 import br.com.algaworks.algafoodapi.api.converter.output.RestauranteOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
-import br.com.algaworks.algafoodapi.domain.exception.CidadeNaoEncontradaException;
-import br.com.algaworks.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
-import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
-import br.com.algaworks.algafoodapi.domain.exception.ValidacaoException;
+import br.com.algaworks.algafoodapi.domain.exception.*;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import br.com.algaworks.algafoodapi.domain.service.RestauranteService;
@@ -152,6 +149,26 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inativar(@PathVariable Long id) {
         restauranteService.inativar(id);
+    }
+
+    @PutMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+        try {
+            restauranteService.ativar(restaurantesIds);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+        try {
+            restauranteService.inativar(restaurantesIds);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
     }
 
     @PutMapping("/{restauranteId}/fechamento")

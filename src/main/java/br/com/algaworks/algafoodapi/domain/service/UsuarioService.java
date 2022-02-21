@@ -4,6 +4,7 @@ import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.EstadoNaoEncontradoException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.exception.UsuarioNaoEncontradoException;
+import br.com.algaworks.algafoodapi.domain.model.Grupo;
 import br.com.algaworks.algafoodapi.domain.model.Usuario;
 import br.com.algaworks.algafoodapi.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private GrupoService grupoService;
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
@@ -63,5 +67,19 @@ public class UsuarioService {
         }
 
         usuario.setSenha(novaSenha);
+    }
+
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = grupoService.buscarOuFalhar(grupoId);
+        usuario.associarGrupo(grupo);
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = grupoService.buscarOuFalhar(grupoId);
+        usuario.desassociarGrupo(grupo);
     }
 }

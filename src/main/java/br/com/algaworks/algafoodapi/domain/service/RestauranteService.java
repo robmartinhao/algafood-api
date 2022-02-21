@@ -26,6 +26,9 @@ public class RestauranteService {
     @Autowired
     private FormaPagamentoService formaPagamentoService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
@@ -94,5 +97,19 @@ public class RestauranteService {
     public Restaurante buscarOuFalhar(Long id) {
         return restauranteRepository.findById(id)
                 .orElseThrow(() -> new RestauranteNaoEncontradoException(id));
+    }
+
+    @Transactional
+    public void associarGrupo(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+        restaurante.associarResponsavel(usuario);
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+        restaurante.desassociarResponsavel(usuario);
     }
 }

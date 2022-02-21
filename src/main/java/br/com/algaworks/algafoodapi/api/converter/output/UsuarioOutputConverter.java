@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class UsuarioOutputConverter {
         return modelMapper.map(usuario, UsuarioOutput.class);
     }
 
-    public List<UsuarioOutput> toCollectionUsuarioOutput(List<Usuario> usuarios) {
+    public List<UsuarioOutput> toCollectionUsuarioOutput(Collection<Usuario> usuarios) {
         return usuarios.stream()
                 .map(this::toUsuarioOutput)
                 .collect(Collectors.toList());

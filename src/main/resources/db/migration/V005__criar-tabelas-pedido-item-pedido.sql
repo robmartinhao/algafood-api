@@ -21,7 +21,6 @@ create table pedido
     data_confirmacao     datetime null,
     data_cancelamento    datetime null,
     data_entrega         datetime null,
-    item_pedido_id       bigint         not null,
 
     primary key (id),
 

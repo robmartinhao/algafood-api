@@ -12,8 +12,12 @@ import br.com.algaworks.algafoodapi.domain.model.Pedido;
 import br.com.algaworks.algafoodapi.domain.model.Usuario;
 import br.com.algaworks.algafoodapi.domain.repository.PedidoRepository;
 import br.com.algaworks.algafoodapi.domain.service.EmissaoPedidoService;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,9 +43,28 @@ public class PedidoController {
     private PedidoDomainConverter pedidoDomainConverter;
 
     @GetMapping
-    public List<PedidoResumoOutput> listar() {
-        return pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidoRepository.findAll());
+    public MappingJacksonValue listar(@RequestParam(required = false) String campos) {
+        List<Pedido> pedidos = pedidoRepository.findAll();
+        List<PedidoResumoOutput> pedidosOutput = pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidos);
+
+        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosOutput);
+
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+        SimpleFilterProvider filters = filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
+
+        if (StringUtils.isNotBlank(campos)) {
+            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
+        }
+
+        pedidosWrapper.setFilters(filters);
+
+        return pedidosWrapper;
     }
+
+//    @GetMapping
+//    public List<PedidoResumoOutput> listar() {
+//        return pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidoRepository.findAll());
+//    }
 
     @GetMapping("/{codigoPedido}")
     public PedidoOutput buscarPeloId(@PathVariable String codigoPedido) {

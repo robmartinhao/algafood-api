@@ -3,18 +3,21 @@ package br.com.algaworks.algafoodapi.api.controller;
 import br.com.algaworks.algafoodapi.api.converter.domain.RestauranteDomainConverter;
 import br.com.algaworks.algafoodapi.api.converter.input.RestauranteInputConverter;
 import br.com.algaworks.algafoodapi.api.converter.output.RestauranteOutputConverter;
+import br.com.algaworks.algafoodapi.api.converter.output.view.RestauranteView;
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
 import br.com.algaworks.algafoodapi.domain.exception.*;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import br.com.algaworks.algafoodapi.domain.service.RestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -43,13 +46,57 @@ public class RestauranteController {
     @Autowired
     private RestauranteInputConverter restauranteInputConverter;
 
+
     @Autowired
     private RestauranteDomainConverter restauranteDomainConverter;
 
+    @JsonView(RestauranteView.Resumo.class)
     @GetMapping
     public List<RestauranteOutput> listar() {
         return restauranteOutputConverter.toCollectionRestauranteOutput(restauranteRepository.findAll());
     }
+
+    @JsonView(RestauranteView.ApenasNome.class)
+    @GetMapping(params = "projecao=apenas-nome")
+    public List<RestauranteOutput> listaApenasNome() {
+        return listar();
+    }
+
+
+//    @GetMapping
+//    public MappingJacksonValue listar(@RequestParam(required = false) String projecao) {
+//        List<Restaurante> restaurantes = restauranteRepository.findAll();
+//        List<RestauranteOutput> restaurantesOutput = restauranteOutputConverter.toCollectionRestauranteOutput(restaurantes);
+//
+//        MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restaurantesOutput);
+//
+//        restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
+//
+//        if ("apenas-nome".equals(projecao)) {
+//            restaurantesWrapper.setSerializationView(RestauranteView.ApenasNome.class);
+//        } else if ("completo".equals(projecao)) {
+//            restaurantesWrapper.setSerializationView(null);
+//        }
+//
+//        return restaurantesWrapper;
+//    }
+
+//    @GetMapping
+//    public List<RestauranteOutput> listar() {
+//        return restauranteOutputConverter.toCollectionRestauranteOutput(restauranteRepository.findAll());
+//    }
+//
+//    @JsonView(RestauranteView.Resumo.class)
+//    @GetMapping(params = "projecao=resumo")
+//    public List<RestauranteOutput> listarResumido() {
+//        return listar();
+//    }
+//
+//    @JsonView(RestauranteView.ApenasNome.class)
+//    @GetMapping(params = "projecao=apenas-nome")
+//    public List<RestauranteOutput> listarApenasNomes() {
+//        return listar();
+//    }
 
     @GetMapping("/{id}")
     public RestauranteOutput buscarPeloId(@PathVariable Long id) {

@@ -1,7 +1,7 @@
 package br.com.algaworks.algafoodapi.domain.service;
 
-import br.com.algaworks.algafoodapi.domain.exception.GrupoNaoEncontradoException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
+import br.com.algaworks.algafoodapi.domain.exception.PedidoNaoEncontradoException;
 import br.com.algaworks.algafoodapi.domain.model.*;
 import br.com.algaworks.algafoodapi.domain.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,9 @@ public class EmissaoPedidoService {
     @Autowired
     private ProdutoService produtoService;
 
-    public Pedido buscarOuFalhar(Long id) {
-        return pedidoRepository.findById(id)
-                .orElseThrow(() -> new  GrupoNaoEncontradoException(id));
+    public Pedido buscarOuFalhar(String codigoPedido) {
+        return pedidoRepository.findByCodigo(codigoPedido)
+                .orElseThrow(() -> new PedidoNaoEncontradoException((codigoPedido)));
     }
 
     @Transactional

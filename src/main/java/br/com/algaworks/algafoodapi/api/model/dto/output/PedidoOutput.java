@@ -1,7 +1,5 @@
 package br.com.algaworks.algafoodapi.api.model.dto.output;
 
-import br.com.algaworks.algafoodapi.domain.model.ItemPedido;
-import br.com.algaworks.algafoodapi.domain.model.Usuario;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +11,7 @@ import java.util.List;
 @Setter
 public class PedidoOutput {
 
-    private Long id;
+    private String codigo;
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
     private BigDecimal valorTotal;

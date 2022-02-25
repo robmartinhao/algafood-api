@@ -43,9 +43,9 @@ public class PedidoController {
         return pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidoRepository.findAll());
     }
 
-    @GetMapping("/{id}")
-    public PedidoOutput buscarPeloId(@PathVariable Long id) {
-        return pedidoOutputConverter.toPedidoOutput(emissaoPedidoService.buscarOuFalhar(id));
+    @GetMapping("/{codigoPedido}")
+    public PedidoOutput buscarPeloId(@PathVariable String codigoPedido) {
+        return pedidoOutputConverter.toPedidoOutput(emissaoPedidoService.buscarOuFalhar(codigoPedido));
     }
 
     @PostMapping

@@ -36,9 +36,14 @@ public class RestauranteProdutoController {
     private ProdutoDomainConverter produtoDomainConverter;
 
     @GetMapping
-    public List<ProdutoOutput> listar(@PathVariable Long restauranteId) {
+    public List<ProdutoOutput> listar(@PathVariable Long restauranteId, @RequestParam(required = false) boolean incluirInativos) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
-        List<Produto> produtos = produtoRepository.findByRestaurante(restaurante);
+        List<Produto> produtos;
+        if (incluirInativos) {
+            produtos = produtoRepository.findTodosByRestaurante(restaurante);
+        } else {
+            produtos = produtoRepository.findAtivosByRestaurante(restaurante);
+        }
         return produtoOutputConverter.toCollectionProdutoOutput(produtos);
     }
 

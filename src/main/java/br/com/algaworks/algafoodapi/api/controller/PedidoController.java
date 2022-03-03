@@ -42,29 +42,29 @@ public class PedidoController {
     @Autowired
     private PedidoDomainConverter pedidoDomainConverter;
 
-    @GetMapping
-    public MappingJacksonValue listar(@RequestParam(required = false) String campos) {
-        List<Pedido> pedidos = pedidoRepository.findAll();
-        List<PedidoResumoOutput> pedidosOutput = pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidos);
-
-        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosOutput);
-
-        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-        SimpleFilterProvider filters = filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
-
-        if (StringUtils.isNotBlank(campos)) {
-            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
-        }
-
-        pedidosWrapper.setFilters(filters);
-
-        return pedidosWrapper;
-    }
-
 //    @GetMapping
-//    public List<PedidoResumoOutput> listar() {
-//        return pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidoRepository.findAll());
+//    public MappingJacksonValue listar(@RequestParam(required = false) String campos) {
+//        List<Pedido> pedidos = pedidoRepository.findAll();
+//        List<PedidoResumoOutput> pedidosOutput = pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidos);
+//
+//        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosOutput);
+//
+//        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+//        SimpleFilterProvider filters = filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
+//
+//        if (StringUtils.isNotBlank(campos)) {
+//            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
+//        }
+//
+//        pedidosWrapper.setFilters(filters);
+//
+//        return pedidosWrapper;
 //    }
+
+    @GetMapping
+    public List<PedidoResumoOutput> listar() {
+        return pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidoRepository.findAll());
+    }
 
     @GetMapping("/{codigoPedido}")
     public PedidoOutput buscarPeloId(@PathVariable String codigoPedido) {

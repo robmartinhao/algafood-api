@@ -18,6 +18,10 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
@@ -64,8 +68,11 @@ public class PedidoController {
 //    }
 
     @GetMapping
-    public List<PedidoResumoOutput> pesquisar(PedidoFilter filtro) {
-        return pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro)));
+    public Page<PedidoResumoOutput> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
+        Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
+        List<PedidoResumoOutput> pedidosResumoOutput = pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidosPage.getContent());
+        Page<PedidoResumoOutput> pedidosResumoOutputPage = new PageImpl<>(pedidosResumoOutput, pageable, pedidosPage.getTotalElements());
+        return pedidosResumoOutputPage;
     }
 
     @GetMapping("/{codigoPedido}")

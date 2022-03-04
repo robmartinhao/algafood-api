@@ -19,5 +19,6 @@ public class PedidoResumoOutput {
     private String status;
     private OffsetDateTime dataCriacao;
     private RestauranteResumoOutput restaurante;
-    private UsuarioOutput cliente;
+//    private UsuarioOutput cliente;
+    private String nomeCliente;
 }

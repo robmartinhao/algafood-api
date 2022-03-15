@@ -1,4 +1,4 @@
-package br.com.algaworks.algafoodapi.domain.repository.filter;
+package br.com.algaworks.algafoodapi.domain.filter;
 
 import lombok.Getter;
 import lombok.Setter;

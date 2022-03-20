@@ -4,5 +4,6 @@ import br.com.algaworks.algafoodapi.domain.model.FotoProduto;
 
 public interface ProdutoRepositoryQueries {
 
-    FotoProduto save(FotoProduto foto);
+    FotoProduto save(FotoProduto fotoProduto);
+    void delete(FotoProduto fotoProduto);
 }

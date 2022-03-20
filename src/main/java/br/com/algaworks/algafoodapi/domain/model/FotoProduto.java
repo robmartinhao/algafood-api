@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -23,4 +24,10 @@ public class FotoProduto {
     private String descricao;
     private String contentType;
     private Long tamanho;
+
+    public Long getRestauranteId() {
+        return Optional.ofNullable(getProduto()).map(
+                        p -> p.getRestaurante().getId())
+                .orElse(null);
+    }
 }

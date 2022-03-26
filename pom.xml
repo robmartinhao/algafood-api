@@ -17,6 +17,7 @@
         <java.version>11</java.version>
         <modelmapper.version>3.0.0</modelmapper.version>
         <jasperreports.version>6.19.0</jasperreports.version>
+        <aws-java-sdk-s3.version>1.12.186</aws-java-sdk-s3.version>
     </properties>
     <dependencies>
         <dependency>
@@ -94,8 +95,12 @@
             <artifactId>jasperreports-functions</artifactId>
             <version>${jasperreports.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${aws-java-sdk-s3.version}</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -109,5 +114,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

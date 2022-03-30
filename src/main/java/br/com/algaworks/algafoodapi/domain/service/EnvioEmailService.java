@@ -1,7 +1,6 @@
 package br.com.algaworks.algafoodapi.domain.service;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -11,9 +10,16 @@ public interface EnvioEmailService {
 
     @Getter
     @Setter
+    @Builder
     class Mensagem {
+
+        @Singular
         private Set<String> destinatarios;
+
+        @NonNull
         private String assunto;
+
+        @NonNull
         private String corpo;
     }
 }

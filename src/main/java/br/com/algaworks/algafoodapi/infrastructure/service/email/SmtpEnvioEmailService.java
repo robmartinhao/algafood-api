@@ -13,7 +13,6 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 
-@Service
 public class SmtpEnvioEmailService implements EnvioEmailService {
 
     @Autowired
@@ -44,7 +43,7 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
         }
     }
 
-    private String processarTemplate(Mensagem mensagem) {
+    protected String processarTemplate(Mensagem mensagem) {
         try {
             Template template = freeMakerConfig.getTemplate(mensagem.getCorpo());
 

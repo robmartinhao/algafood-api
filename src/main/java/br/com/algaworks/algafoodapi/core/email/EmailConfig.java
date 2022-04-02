@@ -2,6 +2,7 @@ package br.com.algaworks.algafoodapi.core.email;
 
 import br.com.algaworks.algafoodapi.domain.service.EnvioEmailService;
 import br.com.algaworks.algafoodapi.infrastructure.service.email.FakeEnvioEmailService;
+import br.com.algaworks.algafoodapi.infrastructure.service.email.SandboxEnvioEmailService;
 import br.com.algaworks.algafoodapi.infrastructure.service.email.SmtpEnvioEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,8 @@ public class EmailConfig {
                 return new FakeEnvioEmailService();
             case SMTP:
                 return new SmtpEnvioEmailService();
+            case SANDBOX:
+                return new SandboxEnvioEmailService();
             default:
                 return null;
         }

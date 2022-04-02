@@ -3,7 +3,7 @@ function consultarRestaurantes() {
         url: "http://localhost:8080/restaurantes",
         type: "get",
         success: function(response) {
-            $("#conteudo").text(response);
+            $("#conteudo").text(JSON.stringify(response));
         }
     });
 }

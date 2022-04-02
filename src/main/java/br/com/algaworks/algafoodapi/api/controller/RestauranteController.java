@@ -15,7 +15,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -52,15 +54,18 @@ public class RestauranteController {
 
     @JsonView(RestauranteView.Resumo.class)
     @GetMapping
-    public List<RestauranteOutput> listar() {
-        return restauranteOutputConverter.toCollectionRestauranteOutput(restauranteRepository.findAll());
+    public ResponseEntity<List<RestauranteOutput>> listar() {
+        List<RestauranteOutput> restaurantesOutput = restauranteOutputConverter.toCollectionRestauranteOutput(restauranteRepository.findAll());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:63342")
+                .body(restaurantesOutput);
     }
 
-    @JsonView(RestauranteView.ApenasNome.class)
-    @GetMapping(params = "projecao=apenas-nome")
-    public List<RestauranteOutput> listaApenasNome() {
-        return listar();
-    }
+//    @JsonView(RestauranteView.ApenasNome.class)
+//    @GetMapping(params = "projecao=apenas-nome")
+//    public List<RestauranteOutput> listaApenasNome() {
+//        return listar();
+//    }
 
 
 //    @GetMapping

@@ -32,7 +32,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:63342")
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {

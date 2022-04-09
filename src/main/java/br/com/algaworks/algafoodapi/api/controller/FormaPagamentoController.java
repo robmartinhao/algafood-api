@@ -45,8 +45,12 @@ public class FormaPagamentoController {
     }
 
     @GetMapping("/{id}")
-    public FormaPagamentoOutput buscarPeloId(@PathVariable Long id) {
-        return formaPagamentoOutputConverter.toFormaPagamentoOutput(formaPagamentoService.buscarOuFalhar(id));
+    public ResponseEntity<FormaPagamentoOutput> buscarPeloId(@PathVariable Long id) {
+        FormaPagamentoOutput formaPagamentoOutput = formaPagamentoOutputConverter
+                .toFormaPagamentoOutput(formaPagamentoService.buscarOuFalhar(id));
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .body(formaPagamentoOutput);
     }
 
     @PostMapping

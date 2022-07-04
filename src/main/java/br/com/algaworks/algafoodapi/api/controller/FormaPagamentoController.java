@@ -40,7 +40,11 @@ public class FormaPagamentoController {
         List<FormaPagamentoOutput> formasPagamentoOutput = formaPagamentoOutputConverter
                 .toCollectionFormaPagamentoOutput(formaPagamentoRepository.findAll());
         return ResponseEntity.ok()
-                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate())
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+//                .cacheControl(CacheControl.noCache())
+//                .cacheControl(CacheControl.noStore())
                 .body(formasPagamentoOutput);
     }
 

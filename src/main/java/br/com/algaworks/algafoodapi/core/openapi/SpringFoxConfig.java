@@ -28,13 +28,25 @@ public class SpringFoxConfig {
     public Docket apiDocket() {
         return new Docket(DocumentationType.OAS_30)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("br.com.algaworks.algafoodapi"))
-                .paths(PathSelectors.any())
-                .build()
+                    .apis(RequestHandlerSelectors.basePackage("br.com.algaworks.algafoodapi"))
+                    .paths(PathSelectors.any())
+                    .build()
                 .useDefaultResponseMessages(false)
                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
+                .globalResponses(HttpMethod.POST, globalPostResponseMessages())
+                .globalResponses(HttpMethod.PUT, globalPutResponseMessages())
+                .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"));
+    }
+
+    public ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("AlgaFood API")
+                .description("API aberta para clientes e restaurantes")
+                .version("1")
+                .contact(new Contact("AlgaWorks", "https://www.algaworks.com", "contato@algaworks.com"))
+                .build();
     }
 
     private List<Response> globalGetResponseMessages() {
@@ -50,13 +62,58 @@ public class SpringFoxConfig {
         );
     }
 
-    public ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("AlgaFood API")
-                .description("API aberta para clientes e restaurantes")
-                .version("1")
-                .contact(new Contact("AlgaWorks", "https://www.algaworks.com", "contato@algaworks.com"))
-                .build();
+    private List<Response> globalPostResponseMessages() {
+        return Arrays.asList(
+                new ResponseBuilder()
+                        .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                        .description("Requisição inválida (erro do cliente)")
+                        .build(),
+                new ResponseBuilder()
+                        .code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                        .description("Erro interno do Servidor")
+                        .build(),
+                new ResponseBuilder()
+                        .code(String.valueOf(HttpStatus.NOT_ACCEPTABLE.value()))
+                        .description("Recurso não possui representação que pode ser aceita pelo consumidor")
+                        .build(),
+                new ResponseBuilder()
+                        .code(String.valueOf(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
+                        .description("Requisição recusada porque o corpo está em um formato não suportado")
+                        .build()
+        );
     }
 
+    private List<Response> globalPutResponseMessages() {
+        return Arrays.asList(
+                new ResponseBuilder()
+                        .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                        .description("Requisição inválida (erro do cliente)")
+                        .build(),
+                new ResponseBuilder()
+                        .code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                        .description("Erro interno do Servidor")
+                        .build(),
+                new ResponseBuilder()
+                        .code(String.valueOf(HttpStatus.NOT_ACCEPTABLE.value()))
+                        .description("Recurso não possui representação que pode ser aceita pelo consumidor")
+                        .build(),
+                new ResponseBuilder()
+                        .code(String.valueOf(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
+                        .description("Requisição recusada porque o corpo está em um formato não suportado")
+                        .build()
+        );
+    }
+
+    private List<Response> globalDeleteResponseMessages() {
+        return Arrays.asList(
+                new ResponseBuilder()
+                        .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                        .description("Requisição inválida (erro do cliente)")
+                        .build(),
+                new ResponseBuilder()
+                        .code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                        .description("Erro interno do Servidor")
+                        .build()
+        );
+    }
 }

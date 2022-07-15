@@ -3,7 +3,6 @@ package br.com.algaworks.algafoodapi.api.controller;
 import br.com.algaworks.algafoodapi.api.controller.openapi.CidadeControllerOpenApi;
 import br.com.algaworks.algafoodapi.api.converter.domain.CidadeDomainConverter;
 import br.com.algaworks.algafoodapi.api.converter.output.CidadeOutputConverter;
-import br.com.algaworks.algafoodapi.api.exceptionhandler.Problem;
 import br.com.algaworks.algafoodapi.api.model.dto.input.CidadeInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.CidadeOutput;
 import br.com.algaworks.algafoodapi.domain.exception.EstadoNaoEncontradoException;
@@ -11,16 +10,17 @@ import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.model.Cidade;
 import br.com.algaworks.algafoodapi.domain.repository.CidadeRepository;
 import br.com.algaworks.algafoodapi.domain.service.CidadeService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cidades")
+@RequestMapping(path = "/cidades")
 public class CidadeController implements CidadeControllerOpenApi {
 
     @Autowired
@@ -36,17 +36,17 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeDomainConverter cidadeDomainConverter;
 
     @ApiOperation("Lista as cidades")
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CidadeOutput> listar() {
         return cidadeOutputConverter.toCollectionCidadeOutput(cidadeRepository.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeOutput buscarPeloId(@PathVariable Long id) {
         return cidadeOutputConverter.toCidadeOutput(cidadeService.buscarOuFalhar(id));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeOutput salvar(@RequestBody @Valid CidadeInput cidadeInput) {
         try {
@@ -57,7 +57,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path ="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeOutput atualizar(@PathVariable Long id,
                                   @RequestBody @Valid CidadeInput cidadeInput) {
         try {

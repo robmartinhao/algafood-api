@@ -38,9 +38,9 @@ public class SpringFoxConfig {
 
         return new Docket(DocumentationType.OAS_30)
                 .select()
-                    .apis(RequestHandlerSelectors.basePackage("br.com.algaworks.algafoodapi"))
-                    .paths(PathSelectors.any())
-                    .build()
+                .apis(RequestHandlerSelectors.basePackage("br.com.algaworks.algafoodapi"))
+                .paths(PathSelectors.any())
+                .build()
                 .useDefaultResponseMessages(false)
                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
                 .globalResponses(HttpMethod.POST, globalPosPuttResponseMessages())
@@ -48,7 +48,8 @@ public class SpringFoxConfig {
                 .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
                 .additionalModels(TypeResolver.resolve(Problem.class))
                 .apiInfo(apiInfo())
-                .tags(new Tag("Cidades", "Gerencia as cidades"));
+                .tags(new Tag("Cidades", "Gerencia as cidades"),
+                        new Tag("Grupos", "Gerencia os grupos de usuários"));
     }
 
     public ApiInfo apiInfo() {
@@ -80,13 +81,13 @@ public class SpringFoxConfig {
                 new ResponseBuilder()
                         .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                         .description("Requisição inválida (erro do cliente)")
-                        .representation( MediaType.APPLICATION_JSON )
+                        .representation(MediaType.APPLICATION_JSON)
                         .apply(getProblemaModelReference())
                         .build(),
                 new ResponseBuilder()
                         .code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
                         .description("Erro interno do Servidor")
-                        .representation( MediaType.APPLICATION_JSON )
+                        .representation(MediaType.APPLICATION_JSON)
                         .apply(getProblemaModelReference())
                         .build(),
                 new ResponseBuilder()
@@ -96,7 +97,7 @@ public class SpringFoxConfig {
                 new ResponseBuilder()
                         .code(String.valueOf(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
                         .description("Requisição recusada porque o corpo está em um formato não suportado")
-                        .representation( MediaType.APPLICATION_JSON )
+                        .representation(MediaType.APPLICATION_JSON)
                         .apply(getProblemaModelReference())
                         .build()
         );
@@ -107,13 +108,13 @@ public class SpringFoxConfig {
                 new ResponseBuilder()
                         .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                         .description("Requisição inválida (erro do cliente)")
-                        .representation( MediaType.APPLICATION_JSON )
+                        .representation(MediaType.APPLICATION_JSON)
                         .apply(getProblemaModelReference())
                         .build(),
                 new ResponseBuilder()
                         .code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
                         .description("Erro interno do Servidor")
-                        .representation( MediaType.APPLICATION_JSON )
+                        .representation(MediaType.APPLICATION_JSON)
                         .apply(getProblemaModelReference())
                         .build()
         );

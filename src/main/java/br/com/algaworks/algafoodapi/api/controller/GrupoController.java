@@ -1,5 +1,6 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
+import br.com.algaworks.algafoodapi.api.controller.openapi.GrupoControllerOpenApi;
 import br.com.algaworks.algafoodapi.api.converter.domain.GrupoDomainConverter;
 import br.com.algaworks.algafoodapi.api.converter.output.GrupoOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.input.GrupoInput;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/grupos")
-public class GrupoController {
+public class GrupoController implements GrupoControllerOpenApi {
 
     @Autowired
     private GrupoRepository grupoRepository;

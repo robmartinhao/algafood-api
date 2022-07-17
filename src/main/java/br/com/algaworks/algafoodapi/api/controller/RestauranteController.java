@@ -6,6 +6,7 @@ import br.com.algaworks.algafoodapi.api.converter.output.RestauranteOutputConver
 import br.com.algaworks.algafoodapi.api.converter.output.view.RestauranteView;
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
+import br.com.algaworks.algafoodapi.api.openapi.model.RestauranteBasicoModelOpenApi;
 import br.com.algaworks.algafoodapi.domain.exception.*;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
@@ -13,6 +14,9 @@ import br.com.algaworks.algafoodapi.domain.service.RestauranteService;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -52,6 +56,12 @@ public class RestauranteController {
     @Autowired
     private RestauranteDomainConverter restauranteDomainConverter;
 
+    @ApiOperation(value = "Lista restaurantes", response = RestauranteBasicoModelOpenApi.class)
+    @ApiImplicitParams(
+            @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
+                    name = "projecao", paramType = "query", dataTypeClass = String.class
+            )
+    )
     @JsonView(RestauranteView.Resumo.class)
     @GetMapping
     public List<RestauranteOutput> listar() {
@@ -59,12 +69,12 @@ public class RestauranteController {
         return restauranteOutputConverter.toCollectionRestauranteOutput(restauranteRepository.findAll());
     }
 
+    @ApiOperation(value = "Lista restaurantes", hidden = true)
     @JsonView(RestauranteView.ApenasNome.class)
     @GetMapping(params = "projecao=apenas-nome")
     public List<RestauranteOutput> listaApenasNome() {
         return listar();
     }
-
 
 //    @GetMapping
 //    public MappingJacksonValue listar(@RequestParam(required = false) String projecao) {

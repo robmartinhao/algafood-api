@@ -1,6 +1,6 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
-import br.com.algaworks.algafoodapi.api.controller.openapi.CidadeControllerOpenApi;
+import br.com.algaworks.algafoodapi.api.openapi.controller.CidadeControllerOpenApi;
 import br.com.algaworks.algafoodapi.api.converter.domain.CidadeDomainConverter;
 import br.com.algaworks.algafoodapi.api.converter.output.CidadeOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.input.CidadeInput;

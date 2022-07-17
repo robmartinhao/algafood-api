@@ -15,6 +15,8 @@ import br.com.algaworks.algafoodapi.domain.repository.PedidoRepository;
 import br.com.algaworks.algafoodapi.domain.filter.PedidoFilter;
 import br.com.algaworks.algafoodapi.domain.service.EmissaoPedidoService;
 import br.com.algaworks.algafoodapi.infrastructure.repository.spec.PedidoSpecs;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -65,6 +67,10 @@ public class PedidoController {
 //        return pedidosWrapper;
 //    }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
+                    name = "campos", paramType = "query", type = "string")
+    })
     @GetMapping
     public Page<PedidoResumoOutput> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
         pageable = traduzirPageable(pageable);
@@ -79,6 +85,10 @@ public class PedidoController {
         return pedidoOutputConverter.toPedidoOutput(emissaoPedidoService.buscarOuFalhar(codigoPedido));
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
+                    name = "campos", paramType = "query", type = "string")
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoOutput salvar(@RequestBody @Valid PedidoInput pedidoInput) {

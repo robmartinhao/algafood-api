@@ -4,6 +4,7 @@ import br.com.algaworks.algafoodapi.api.converter.domain.FormaPagamentoDomainCon
 import br.com.algaworks.algafoodapi.api.converter.output.FormaPagamentoOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.input.FormaPagamentoInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.FormaPagamentoOutput;
+import br.com.algaworks.algafoodapi.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import br.com.algaworks.algafoodapi.domain.exception.FormaDePagamentoNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.model.FormaPagamento;
@@ -12,6 +13,7 @@ import br.com.algaworks.algafoodapi.domain.service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -24,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/formas-pagamento")
-public class FormaPagamentoController {
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
@@ -38,7 +40,7 @@ public class FormaPagamentoController {
     @Autowired
     private FormaPagamentoDomainConverter formaPagamentoDomainConverter;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FormaPagamentoOutput>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
@@ -62,7 +64,7 @@ public class FormaPagamentoController {
                 .body(formasPagamentoOutput);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FormaPagamentoOutput> buscarPeloId(@PathVariable Long id, ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
@@ -86,14 +88,14 @@ public class FormaPagamentoController {
                 .body(formaPagamentoOutput);
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoOutput salvar(@Valid @RequestBody FormaPagamentoInput formaPagamentoInput) {
         FormaPagamento formaPagamento = formaPagamentoDomainConverter.toDomainObject(formaPagamentoInput);
         return formaPagamentoOutputConverter.toFormaPagamentoOutput(formaPagamentoService.salvar(formaPagamento));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public FormaPagamentoOutput atualizar(@PathVariable Long id, @RequestBody FormaPagamentoInput formaPagamentoInput) {
         try {
             FormaPagamento formaPagamentoEncontrada = formaPagamentoService.buscarOuFalhar(id);

@@ -6,6 +6,7 @@ import br.com.algaworks.algafoodapi.api.converter.output.PedidoResumoOutputConve
 import br.com.algaworks.algafoodapi.api.model.dto.input.PedidoInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.PedidoOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.PedidoResumoOutput;
+import br.com.algaworks.algafoodapi.api.openapi.controller.PedidoControllerOpenApi;
 import br.com.algaworks.algafoodapi.core.data.PageableTranslator;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/pedidos")
-public class PedidoController {
+public class PedidoController implements PedidoControllerOpenApi {
 
     @Autowired
     private PedidoRepository pedidoRepository;
@@ -67,10 +68,6 @@ public class PedidoController {
 //        return pedidosWrapper;
 //    }
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
-                    name = "campos", paramType = "query", type = "string")
-    })
     @GetMapping
     public Page<PedidoResumoOutput> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
         pageable = traduzirPageable(pageable);
@@ -85,10 +82,6 @@ public class PedidoController {
         return pedidoOutputConverter.toPedidoOutput(emissaoPedidoService.buscarOuFalhar(codigoPedido));
     }
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
-                    name = "campos", paramType = "query", type = "string")
-    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoOutput salvar(@RequestBody @Valid PedidoInput pedidoInput) {

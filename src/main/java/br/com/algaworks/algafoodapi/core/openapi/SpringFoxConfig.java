@@ -1,9 +1,11 @@
 package br.com.algaworks.algafoodapi.core.openapi;
 
 import br.com.algaworks.algafoodapi.api.model.dto.output.CozinhaOutput;
+import br.com.algaworks.algafoodapi.api.model.dto.output.PedidoResumoOutput;
 import br.com.algaworks.algafoodapi.api.openapi.model.CozinhasModelOpenApi;
 import br.com.algaworks.algafoodapi.api.openapi.model.PageableModelOpenApi;
 import br.com.algaworks.algafoodapi.api.exceptionhandler.Problem;
+import br.com.algaworks.algafoodapi.api.openapi.model.PedidosResumoModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
@@ -66,6 +68,8 @@ public class SpringFoxConfig {
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         TypeResolver.resolve(Page.class, CozinhaOutput.class), CozinhasModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        TypeResolver.resolve(Page.class, PedidoResumoOutput.class), PedidosResumoModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Grupos", "Gerencia os grupos de usuários"),

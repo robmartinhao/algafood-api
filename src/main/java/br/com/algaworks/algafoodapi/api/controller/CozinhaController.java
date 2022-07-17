@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,7 +35,7 @@ public class CozinhaController {
     @Autowired
     private CozinhaDomainConverter cozinhaDomainConverter;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<CozinhaOutput> listar(@PageableDefault(size = 2) Pageable pageable) {
         Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
         List<CozinhaOutput> cozinhasOutput = cozinhaOutputConverter.toCollectionCozinhaOutput(cozinhasPage.getContent());
@@ -42,20 +43,20 @@ public class CozinhaController {
         return cozinhasOutputPage;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaOutput buscarPeloId(@PathVariable Long id) {
         Cozinha cozinha = cozinhaService.buscarOuFalhar(id);
         return cozinhaOutputConverter.toCozinhaOutput(cozinha);
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaOutput salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinha = cozinhaDomainConverter.toDomainObject(cozinhaInput);
         return cozinhaOutputConverter.toCozinhaOutput(cozinhaService.salvar(cozinha));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaOutput atualizar(@PathVariable Long id, @RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinhaEncontrada = cozinhaService.buscarOuFalhar(id);
 

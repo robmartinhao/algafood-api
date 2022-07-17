@@ -18,7 +18,7 @@ public interface CozinhaControllerOpenApi {
             @ApiResponse(code = 400, message = "ID da cozinha inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    public CozinhaOutput buscar(
+    public CozinhaOutput buscarPeloId(
             @ApiParam(value = "ID de uma cozinha", example = "1")
             Long cozinhaId);
 

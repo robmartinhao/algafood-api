@@ -17,13 +17,13 @@ public interface CidadeControllerOpenApi {
             @ApiResponse(code = 400, message = "ID da cidade inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
     })
-    CidadeOutput buscarPeloId(@ApiParam(value = "ID de uma cidade") Long id);
+    CidadeOutput buscarPeloId(@ApiParam(value = "ID de uma cidade", example = "1", required = true) Long id);
 
     @ApiOperation("Cadastra uma cidade")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Cidade cadastrada")
     })
-    CidadeOutput salvar(@ApiParam(value = "Representação de uma nova cidade")
+    CidadeOutput salvar(@ApiParam(value = "Representação de uma nova cidade", required = true)
                         CidadeInput cidadeInput);
 
     @ApiOperation("Atualiza uma cidade por ID")
@@ -31,7 +31,7 @@ public interface CidadeControllerOpenApi {
             @ApiResponse(code = 200, message = "Cidade atualizada"),
             @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
     })
-    CidadeOutput atualizar(@ApiParam(value = "ID de uma cidade")
+    CidadeOutput atualizar(@ApiParam(value = "ID de uma cidade", example = "1", required = true)
                            Long id,
                            @ApiParam(name = "corpo", value = "Representação de uma cidade com novos dados")
                            CidadeInput cidadeInput);
@@ -42,6 +42,6 @@ public interface CidadeControllerOpenApi {
             @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
     })
     void remover(
-            @ApiParam(value = "ID de uma cidade")
+            @ApiParam(value = "ID de uma cidade", example = "1", required = true)
             Long id);
 }

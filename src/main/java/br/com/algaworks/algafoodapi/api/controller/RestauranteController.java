@@ -21,6 +21,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -56,20 +57,13 @@ public class RestauranteController {
     @Autowired
     private RestauranteDomainConverter restauranteDomainConverter;
 
-    @ApiOperation(value = "Lista restaurantes", response = RestauranteBasicoModelOpenApi.class)
-    @ApiImplicitParams(
-            @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
-                    name = "projecao", paramType = "query", dataTypeClass = String.class
-            )
-    )
     @JsonView(RestauranteView.Resumo.class)
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RestauranteOutput> listar() {
 
         return restauranteOutputConverter.toCollectionRestauranteOutput(restauranteRepository.findAll());
     }
 
-    @ApiOperation(value = "Lista restaurantes", hidden = true)
     @JsonView(RestauranteView.ApenasNome.class)
     @GetMapping(params = "projecao=apenas-nome")
     public List<RestauranteOutput> listaApenasNome() {
@@ -111,7 +105,7 @@ public class RestauranteController {
 //        return listar();
 //    }
 
-    @GetMapping("/{id}")
+    @GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestauranteOutput buscarPeloId(@PathVariable Long id) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(id);
 
@@ -121,7 +115,7 @@ public class RestauranteController {
     @Autowired
     private SmartValidator smartValidator;
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public RestauranteOutput salvar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
@@ -132,7 +126,7 @@ public class RestauranteController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestauranteOutput atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteInput restauranteInput) {
         try {
             Restaurante restauranteEncontrado = restauranteService.buscarOuFalhar(id);

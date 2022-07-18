@@ -4,6 +4,7 @@ import br.com.algaworks.algafoodapi.api.converter.domain.EstadoDomainConverter;
 import br.com.algaworks.algafoodapi.api.converter.output.EstadoOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.input.EstadoInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.EstadoOutput;
+import br.com.algaworks.algafoodapi.api.openapi.controller.EstadoControllerOpenApi;
 import br.com.algaworks.algafoodapi.domain.model.Estado;
 import br.com.algaworks.algafoodapi.domain.repository.EstadoRepository;
 import br.com.algaworks.algafoodapi.domain.service.EstadoService;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/estados")
-public class EstadoController {
+public class EstadoController implements EstadoControllerOpenApi {
 
     @Autowired
     private EstadoRepository estadoRepository;

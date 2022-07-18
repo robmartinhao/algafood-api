@@ -6,7 +6,7 @@ import br.com.algaworks.algafoodapi.api.converter.output.RestauranteOutputConver
 import br.com.algaworks.algafoodapi.api.converter.output.view.RestauranteView;
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
-import br.com.algaworks.algafoodapi.api.openapi.model.RestauranteBasicoModelOpenApi;
+import br.com.algaworks.algafoodapi.api.openapi.controller.RestauranteControllerOpenApi;
 import br.com.algaworks.algafoodapi.domain.exception.*;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
@@ -14,17 +14,11 @@ import br.com.algaworks.algafoodapi.domain.service.RestauranteService;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -39,7 +33,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/restaurantes")
-public class RestauranteController {
+public class RestauranteController implements RestauranteControllerOpenApi {
 
     @Autowired
     private RestauranteService restauranteService;
@@ -66,7 +60,7 @@ public class RestauranteController {
 
     @JsonView(RestauranteView.ApenasNome.class)
     @GetMapping(params = "projecao=apenas-nome")
-    public List<RestauranteOutput> listaApenasNome() {
+    public List<RestauranteOutput> listarApenasNomes() {
         return listar();
     }
 

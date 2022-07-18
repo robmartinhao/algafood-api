@@ -18,7 +18,7 @@ public interface EstadoControllerOpenApi {
             @ApiResponse(code = 400, message = "ID do estado inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Estado não encontrado", response = Problem.class)
     })
-    EstadoOutput buscar(
+    EstadoOutput buscarPeloId(
             @ApiParam(value = "ID de um estado", example = "1", required = true)
             Long estadoId);
 
@@ -26,7 +26,7 @@ public interface EstadoControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 201, message = "Estado cadastrado"),
     })
-    EstadoOutput adicionar(
+    EstadoOutput salvar(
             @ApiParam(name = "corpo", value = "Representação de um novo estado", required = true)
             EstadoInput estadoInput);
 

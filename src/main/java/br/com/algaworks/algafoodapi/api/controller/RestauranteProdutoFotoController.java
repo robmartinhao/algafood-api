@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.controller;
 import br.com.algaworks.algafoodapi.api.converter.output.FotoProdutoOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.input.FotoProdutoInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.FotoProdutoOutput;
+import br.com.algaworks.algafoodapi.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.FotoProduto;
 import br.com.algaworks.algafoodapi.domain.service.CatalogoFotoProdutoService;
@@ -25,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
     @Autowired
     private ProdutoService produtoService;
@@ -39,7 +40,7 @@ public class RestauranteProdutoFotoController {
     @Autowired
     private FotoProdutoOutputConverter fotoProdutoOutputConverter;
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoOutput atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                            @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
         var produto = produtoService.buscarOuFalhar(restauranteId, produtoId);
@@ -70,7 +71,7 @@ public class RestauranteProdutoFotoController {
         return fotoProdutoOutputConverter.toFotoProdutoOutput(fotoEncontrada);
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.ALL_VALUE)
     public ResponseEntity<?> servirFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                                           @RequestHeader(name = "accept") String acceptHeader)
             throws HttpMediaTypeNotAcceptableException {

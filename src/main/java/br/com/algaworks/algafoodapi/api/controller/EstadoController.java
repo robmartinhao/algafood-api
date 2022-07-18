@@ -9,6 +9,7 @@ import br.com.algaworks.algafoodapi.domain.repository.EstadoRepository;
 import br.com.algaworks.algafoodapi.domain.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,24 +31,24 @@ public class EstadoController {
     @Autowired
     private EstadoDomainConverter estadoDomainConverter;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<EstadoOutput> listar() {
         return estadoOutputConverter.toCollectionEstadoOutput(estadoRepository.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value ="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public EstadoOutput buscarPeloId(@PathVariable Long id) {
         return estadoOutputConverter.toEstadoOutput(estadoService.buscarOuFalhar(id));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public EstadoOutput salvar(@RequestBody @Valid EstadoInput estadoInput) {
         Estado estado = estadoDomainConverter.toDomainObject(estadoInput);
         return estadoOutputConverter.toEstadoOutput(estadoService.salvar(estado));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value ="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public EstadoOutput atualizar(@PathVariable Long id, @RequestBody @Valid EstadoInput estadoInput) {
         Estado estadoEncontrado = estadoService.buscarOuFalhar(id);
         estadoDomainConverter.copyToDomainObject(estadoInput, estadoEncontrado);

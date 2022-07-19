@@ -22,7 +22,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     @Autowired
     private UsuarioOutputConverter usuarioOutputConverter;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UsuarioOutput> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 

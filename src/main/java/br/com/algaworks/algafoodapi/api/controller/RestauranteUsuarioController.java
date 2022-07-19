@@ -22,14 +22,14 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     @Autowired
     private UsuarioOutputConverter usuarioOutputConverter;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public List<UsuarioOutput> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 
         return usuarioOutputConverter.toCollectionUsuarioOutput(restaurante.getResponsaveis());
     }
 
-    @PutMapping(value = "/{usuarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void adicionar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.associarGrupo(restauranteId, usuarioId);

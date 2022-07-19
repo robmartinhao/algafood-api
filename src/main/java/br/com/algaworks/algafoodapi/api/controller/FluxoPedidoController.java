@@ -14,19 +14,19 @@ public class FluxoPedidoController implements FluxoPedidoControllerOpenApi {
     @Autowired
     private FluxoPedidoService fluxoPedidoService;
 
-    @PutMapping(value = "/confirmacao", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/confirmacao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void confirmar(@PathVariable String codigoPedido) {
         fluxoPedidoService.confirmar(codigoPedido);
     }
 
-    @PutMapping(path ="/entrega", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path ="/entrega")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void entregar(@PathVariable String codigoPedido) {
         fluxoPedidoService.entregar(codigoPedido);
     }
 
-    @PutMapping(value = "/cancelamento", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/cancelamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelar(@PathVariable String codigoPedido) {
         fluxoPedidoService.cancelar(codigoPedido);

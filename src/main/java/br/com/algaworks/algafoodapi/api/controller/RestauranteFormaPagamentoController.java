@@ -22,7 +22,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     @Autowired
     private FormaPagamentoOutputConverter formaPagamentoOutputConverter;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public List<FormaPagamentoOutput> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 
@@ -35,7 +35,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
         restauranteService.desassociarFormaPagamento(restauranteId, formaPagamentoId);
     }
 
-    @PutMapping(value = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void associar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
         restauranteService.associarFormaPagamento(restauranteId, formaPagamentoId);

@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -42,10 +41,9 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoOutput atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
-                                           @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
+                                           @Valid FotoProdutoInput fotoProdutoInput,
+                                           @RequestPart(required = true) MultipartFile arquivo) throws IOException {
         var produto = produtoService.buscarOuFalhar(restauranteId, produtoId);
-
-        MultipartFile arquivo = fotoProdutoInput.getArquivo();
 
         var foto = new FotoProduto();
         foto.setProduto(produto);

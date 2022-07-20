@@ -2,17 +2,19 @@ package br.com.algaworks.algafoodapi.api.controller;
 
 import br.com.algaworks.algafoodapi.api.converter.output.PermissaoOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.output.PermissaoOutput;
+import br.com.algaworks.algafoodapi.api.openapi.controller.GrupoPermissaoControllerOpenApi;
 import br.com.algaworks.algafoodapi.domain.model.Grupo;
 import br.com.algaworks.algafoodapi.domain.service.GrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/grupos/{grupoId}/permissoes")
-public class GrupoPermissaoController {
+public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi {
 
     @Autowired
     private GrupoService grupoService;
@@ -20,7 +22,7 @@ public class GrupoPermissaoController {
     @Autowired
     private PermissaoOutputConverter permissaoOutputConverter;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PermissaoOutput> listar(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarOuFalhar(grupoId);
 

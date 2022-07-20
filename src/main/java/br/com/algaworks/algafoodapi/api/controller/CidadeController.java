@@ -1,10 +1,11 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
-import br.com.algaworks.algafoodapi.api.openapi.controller.CidadeControllerOpenApi;
+import br.com.algaworks.algafoodapi.api.ResourceUriHelper;
 import br.com.algaworks.algafoodapi.api.converter.domain.CidadeDomainConverter;
 import br.com.algaworks.algafoodapi.api.converter.output.CidadeOutputConverter;
 import br.com.algaworks.algafoodapi.api.model.dto.input.CidadeInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.CidadeOutput;
+import br.com.algaworks.algafoodapi.api.openapi.controller.CidadeControllerOpenApi;
 import br.com.algaworks.algafoodapi.domain.exception.EstadoNaoEncontradoException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.model.Cidade;
@@ -51,7 +52,11 @@ public class CidadeController implements CidadeControllerOpenApi {
     public CidadeOutput salvar(@RequestBody @Valid CidadeInput cidadeInput) {
         try {
             Cidade cidade = cidadeDomainConverter.toDomainObject(cidadeInput);
-            return cidadeOutputConverter.toCidadeOutput(cidadeService.salvar(cidade));
+            CidadeOutput cidadeOutput = cidadeOutputConverter.toCidadeOutput(cidadeService.salvar(cidade));
+
+            ResourceUriHelper.AddUriInResponseHeader(cidadeOutput.getId());
+
+            return cidadeOutput;
         } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }

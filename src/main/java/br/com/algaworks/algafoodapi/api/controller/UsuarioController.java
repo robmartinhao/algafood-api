@@ -11,6 +11,7 @@ import br.com.algaworks.algafoodapi.domain.repository.UsuarioRepository;
 import br.com.algaworks.algafoodapi.domain.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,17 +33,17 @@ public class UsuarioController {
     @Autowired
     private UsuarioDomainConverter usuarioDomainConverter;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UsuarioOutput> listar() {
         return usuarioOutputConverter.toCollectionUsuarioOutput(usuarioRepository.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UsuarioOutput buscarPeloId(@PathVariable Long id) {
         return usuarioOutputConverter.toUsuarioOutput(usuarioService.buscarOuFalhar(id));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioOutput salvar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
         Usuario usuario = usuarioDomainConverter.toDomainObject(usuarioInput);

@@ -13,13 +13,14 @@ import br.com.algaworks.algafoodapi.domain.repository.CidadeRepository;
 import br.com.algaworks.algafoodapi.domain.service.CidadeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(path = "/cidades")
@@ -48,13 +49,17 @@ public class CidadeController implements CidadeControllerOpenApi {
 
         CidadeOutput cidadeOutput = cidadeOutputConverter.toCidadeOutput(cidadeService.buscarOuFalhar(id));
 
-        cidadeOutput.add(Link.of("http://localhost:8088/cidades/1"));
-//		cidadeModel.add(Link.of("http://api.algafood.local:8080/cidades/1", IanaLinkRelations.SELF));
+          cidadeOutput.add(linkTo(CidadeController.class)
+                  .slash(cidadeOutput.getId()).withSelfRel());
+//        cidadeOutput.add(Link.of("http://localhost:8088/cidades/1"));
 
-        cidadeOutput.add(Link.of("http://localhost:8088/cidades", "cidades"));
-//		cidadeModel.add(Link.of("http://api.algafood.local:8080/cidades", IanaLinkRelations.COLLECTION));
+        cidadeOutput.add(linkTo(CidadeController.class)
+                .withRel("cidades"));
+//        cidadeOutput.add(Link.of("http://localhost:8088/cidades", "cidades"));
 
-        cidadeOutput.getEstado().add(Link.of("http://localhost:8088/estados/1"));
+        cidadeOutput.getEstado().add(linkTo(EstadoController.class)
+                .slash(cidadeOutput.getEstado().getId()).withSelfRel());
+//        cidadeOutput.getEstado().add(Link.of("http://localhost:8088/estados/1"));
 
         return cidadeOutput;
     }

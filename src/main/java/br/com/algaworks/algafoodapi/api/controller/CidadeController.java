@@ -13,6 +13,7 @@ import br.com.algaworks.algafoodapi.domain.repository.CidadeRepository;
 import br.com.algaworks.algafoodapi.domain.service.CidadeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,18 @@ public class CidadeController implements CidadeControllerOpenApi {
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeOutput buscarPeloId(@PathVariable Long id) {
-        return cidadeOutputConverter.toCidadeOutput(cidadeService.buscarOuFalhar(id));
+
+        CidadeOutput cidadeOutput = cidadeOutputConverter.toCidadeOutput(cidadeService.buscarOuFalhar(id));
+
+        cidadeOutput.add(Link.of("http://localhost:8088/cidades/1"));
+//		cidadeModel.add(Link.of("http://api.algafood.local:8080/cidades/1", IanaLinkRelations.SELF));
+
+        cidadeOutput.add(Link.of("http://localhost:8088/cidades", "cidades"));
+//		cidadeModel.add(Link.of("http://api.algafood.local:8080/cidades", IanaLinkRelations.COLLECTION));
+
+        cidadeOutput.getEstado().add(Link.of("http://localhost:8088/estados/1"));
+
+        return cidadeOutput;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)

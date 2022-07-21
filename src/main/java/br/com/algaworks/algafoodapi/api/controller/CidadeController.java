@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "/cidades")
@@ -49,17 +50,13 @@ public class CidadeController implements CidadeControllerOpenApi {
 
         CidadeOutput cidadeOutput = cidadeOutputConverter.toCidadeOutput(cidadeService.buscarOuFalhar(id));
 
-          cidadeOutput.add(linkTo(CidadeController.class)
-                  .slash(cidadeOutput.getId()).withSelfRel());
-//        cidadeOutput.add(Link.of("http://localhost:8088/cidades/1"));
+        cidadeOutput.add(linkTo(methodOn(CidadeController.class).buscarPeloId(cidadeOutput.getId()))
+                .withSelfRel());
 
-        cidadeOutput.add(linkTo(CidadeController.class)
-                .withRel("cidades"));
-//        cidadeOutput.add(Link.of("http://localhost:8088/cidades", "cidades"));
+        cidadeOutput.add(linkTo(methodOn(CidadeController.class).listar()).withRel("cidades"));
 
-        cidadeOutput.getEstado().add(linkTo(EstadoController.class)
-                .slash(cidadeOutput.getEstado().getId()).withSelfRel());
-//        cidadeOutput.getEstado().add(Link.of("http://localhost:8088/estados/1"));
+        cidadeOutput.getEstado().add(linkTo(methodOn(EstadoController.class).buscarPeloId(cidadeOutput.getEstado().getId()))
+                .withSelfRel());
 
         return cidadeOutput;
     }
@@ -79,7 +76,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
-    @PutMapping(path ="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeOutput atualizar(@PathVariable Long id,
                                   @RequestBody @Valid CidadeInput cidadeInput) {
         try {

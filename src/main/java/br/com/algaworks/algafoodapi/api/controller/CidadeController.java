@@ -19,10 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "/cidades")
@@ -43,37 +39,12 @@ public class CidadeController implements CidadeControllerOpenApi {
     @ApiOperation("Lista as cidades")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeOutput> listar() {
-        List<CidadeOutput> cidadesModel = cidadeOutputConverter.toCollectionCidadeOutput(cidadeRepository.findAll());
-
-        cidadesModel.forEach(cidadeModel -> {
-            cidadeModel.add(linkTo(methodOn(CidadeController.class).buscarPeloId(cidadeModel.getId()))
-                    .withSelfRel());
-            cidadeModel.add(linkTo(methodOn(CidadeController.class).listar()).withRel("cidades"));
-            cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class).buscarPeloId(cidadeModel.getEstado().getId()))
-                    .withSelfRel());
-        });
-
-        CollectionModel<CidadeOutput> cidadesCollectionModel = CollectionModel.of(cidadesModel);
-
-        cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
-
-        return cidadesCollectionModel;
+        return cidadeOutputConverter.toCollectionModel(cidadeRepository.findAll());
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeOutput buscarPeloId(@PathVariable Long id) {
-
-        CidadeOutput cidadeOutput = cidadeOutputConverter.toCidadeOutput(cidadeService.buscarOuFalhar(id));
-
-        cidadeOutput.add(linkTo(methodOn(CidadeController.class).buscarPeloId(cidadeOutput.getId()))
-                .withSelfRel());
-
-        cidadeOutput.add(linkTo(methodOn(CidadeController.class).listar()).withRel("cidades"));
-
-        cidadeOutput.getEstado().add(linkTo(methodOn(EstadoController.class).buscarPeloId(cidadeOutput.getEstado().getId()))
-                .withSelfRel());
-
-        return cidadeOutput;
+        return cidadeOutputConverter.toModel(cidadeService.buscarOuFalhar(id));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -81,7 +52,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     public CidadeOutput salvar(@RequestBody @Valid CidadeInput cidadeInput) {
         try {
             Cidade cidade = cidadeDomainConverter.toDomainObject(cidadeInput);
-            CidadeOutput cidadeOutput = cidadeOutputConverter.toCidadeOutput(cidadeService.salvar(cidade));
+            CidadeOutput cidadeOutput = cidadeOutputConverter.toModel(cidadeService.salvar(cidade));
 
             ResourceUriHelper.AddUriInResponseHeader(cidadeOutput.getId());
 
@@ -99,7 +70,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
             cidadeDomainConverter.copyToDomainObject(cidadeInput, cidadeEncontrada);
             //BeanUtils.copyProperties(cidade, cidadeEncontrada, "id");
-            return cidadeOutputConverter.toCidadeOutput(cidadeService.salvar(cidadeEncontrada));
+            return cidadeOutputConverter.toModel(cidadeService.salvar(cidadeEncontrada));
         } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }

@@ -23,6 +23,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +51,9 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private PedidoDomainConverter pedidoDomainConverter;
 
+    @Autowired
+    private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+
 //    @GetMapping
 //    public MappingJacksonValue listar(@RequestParam(required = false) String campos) {
 //        List<Pedido> pedidos = pedidoRepository.findAll();
@@ -69,17 +74,16 @@ public class PedidoController implements PedidoControllerOpenApi {
 //    }
 
     @GetMapping
-    public Page<PedidoResumoOutput> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
+    public PagedModel<PedidoResumoOutput> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
         pageable = traduzirPageable(pageable);
         Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
-        List<PedidoResumoOutput> pedidosResumoOutput = pedidoResumoOutputConverter.toCollectionPedidoResumoOutput(pedidosPage.getContent());
-        Page<PedidoResumoOutput> pedidosResumoOutputPage = new PageImpl<>(pedidosResumoOutput, pageable, pedidosPage.getTotalElements());
-        return pedidosResumoOutputPage;
+
+        return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoOutputConverter);
     }
 
     @GetMapping("/{codigoPedido}")
     public PedidoOutput buscarPeloId(@PathVariable String codigoPedido) {
-        return pedidoOutputConverter.toPedidoOutput(emissaoPedidoService.buscarOuFalhar(codigoPedido));
+        return pedidoOutputConverter.toModel(emissaoPedidoService.buscarOuFalhar(codigoPedido));
     }
 
     @PostMapping
@@ -94,7 +98,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 
             novoPedido = emissaoPedidoService.emitir(novoPedido);
 
-            return pedidoOutputConverter.toPedidoOutput(novoPedido);
+            return pedidoOutputConverter.toModel(novoPedido);
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }

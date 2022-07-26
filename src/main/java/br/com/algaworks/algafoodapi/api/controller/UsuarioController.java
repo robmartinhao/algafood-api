@@ -10,6 +10,7 @@ import br.com.algaworks.algafoodapi.domain.model.Usuario;
 import br.com.algaworks.algafoodapi.domain.repository.UsuarioRepository;
 import br.com.algaworks.algafoodapi.domain.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -34,20 +35,20 @@ public class UsuarioController {
     private UsuarioDomainConverter usuarioDomainConverter;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UsuarioOutput> listar() {
-        return usuarioOutputConverter.toCollectionUsuarioOutput(usuarioRepository.findAll());
+    public CollectionModel<UsuarioOutput> listar() {
+        return usuarioOutputConverter.toCollectionModel(usuarioRepository.findAll());
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UsuarioOutput buscarPeloId(@PathVariable Long id) {
-        return usuarioOutputConverter.toUsuarioOutput(usuarioService.buscarOuFalhar(id));
+        return usuarioOutputConverter.toModel(usuarioService.buscarOuFalhar(id));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioOutput salvar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
         Usuario usuario = usuarioDomainConverter.toDomainObject(usuarioInput);
-        return usuarioOutputConverter.toUsuarioOutput(usuarioService.salvar(usuario));
+        return usuarioOutputConverter.toModel(usuarioService.salvar(usuario));
     }
 
     @PutMapping("/{id}")
@@ -55,7 +56,7 @@ public class UsuarioController {
         Usuario usuarioEncontrado = usuarioService.buscarOuFalhar(id);
         usuarioDomainConverter.copyToDomainObject(usuarioInput, usuarioEncontrado);
 
-        return usuarioOutputConverter.toUsuarioOutput(usuarioService.salvar(usuarioEncontrado));
+        return usuarioOutputConverter.toModel(usuarioService.salvar(usuarioEncontrado));
     }
 
     @DeleteMapping("/{id}")

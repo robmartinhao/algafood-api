@@ -1,29 +1,38 @@
 package br.com.algaworks.algafoodapi.api.converter.output;
 
-import br.com.algaworks.algafoodapi.api.model.dto.output.CozinhaOutput;
+import br.com.algaworks.algafoodapi.api.controller.EstadoController;
 import br.com.algaworks.algafoodapi.api.model.dto.output.EstadoOutput;
-import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.model.Estado;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class EstadoOutputConverter {
+public class EstadoOutputConverter extends RepresentationModelAssemblerSupport<Estado, EstadoOutput> {
 
     @Autowired
     private ModelMapper modelMapper;
 
-    public EstadoOutput toEstadoOutput(Estado estado) {
-        return modelMapper.map(estado, EstadoOutput.class);
+    public EstadoOutputConverter() {
+        super(EstadoController.class, EstadoOutput.class);
     }
 
-    public List<EstadoOutput> toCollectionEstadoOutput(List<Estado> estados) {
-        return estados.stream()
-                .map(this::toEstadoOutput)
-                .collect(Collectors.toList());
+    public EstadoOutput toModel(Estado estado) {
+        EstadoOutput estadoModelOutput = createModelWithId(estado.getId(), estado);
+        modelMapper.map(estado, estadoModelOutput);
+
+        estadoModelOutput.add(linkTo(methodOn(EstadoController.class).listar()).withRel("estados"));
+        return estadoModelOutput;
+    }
+
+    @Override
+    public CollectionModel<EstadoOutput> toCollectionModel(Iterable<? extends Estado> entities) {
+        return super.toCollectionModel(entities)
+                .add(linkTo(EstadoController.class).withSelfRel());
     }
 }

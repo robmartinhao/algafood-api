@@ -35,9 +35,15 @@ public class PedidoOutputConverter extends RepresentationModelAssemblerSupport<P
                 new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
         );
+        TemplateVariables filtroVariables = new TemplateVariables(
+                new TemplateVariable("clienteId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoInicio", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoFim", TemplateVariable.VariableType.REQUEST_PARAM)
+        );
         String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
 
-        pedidoModelOutput.add(Link.of(UriTemplate.of(pedidosUrl, pageVariables), "pedidos"));
+        pedidoModelOutput.add(Link.of(UriTemplate.of(pedidosUrl, pageVariables.concat(filtroVariables)), "pedidos"));
         //pedidoModelOutput.add(linkTo(PedidoController.class).withRel("pedidos"));
 
         pedidoModelOutput.getRestaurante().add(linkTo(methodOn(RestauranteController.class)

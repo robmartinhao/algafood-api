@@ -7,6 +7,7 @@ import br.com.algaworks.algafoodapi.api.model.dto.input.PedidoInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.PedidoOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.PedidoResumoOutput;
 import br.com.algaworks.algafoodapi.api.openapi.controller.PedidoControllerOpenApi;
+import br.com.algaworks.algafoodapi.core.data.PageWrapper;
 import br.com.algaworks.algafoodapi.core.data.PageableTranslator;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
@@ -75,8 +76,10 @@ public class PedidoController implements PedidoControllerOpenApi {
 
     @GetMapping
     public PagedModel<PedidoResumoOutput> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
-        pageable = traduzirPageable(pageable);
-        Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
+        Pageable pageableTraduzido = traduzirPageable(pageable);
+        Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
+
+        pedidosPage = new PageWrapper<>(pedidosPage, pageable);
 
         return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoOutputConverter);
     }
@@ -111,7 +114,7 @@ public class PedidoController implements PedidoControllerOpenApi {
                 "taxaFrete", "taxaFrete",
                 "valorTotal", "valorTotal",
                 "dataCriacao", "dataCriacao",
-                "restaurante.nome", "restaurante.nome",
+                "nomerestaurante", "restaurante.nome",
                 "restaurante.id", "restaurante.id",
                 "cliente.id", "cliente.id",
                 "cliente.nome", "cliente.nome"

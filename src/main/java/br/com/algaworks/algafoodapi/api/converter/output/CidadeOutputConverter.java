@@ -1,7 +1,7 @@
 package br.com.algaworks.algafoodapi.api.converter.output;
 
+import br.com.algaworks.algafoodapi.api.AlgaLinks;
 import br.com.algaworks.algafoodapi.api.controller.CidadeController;
-import br.com.algaworks.algafoodapi.api.controller.EstadoController;
 import br.com.algaworks.algafoodapi.api.model.dto.output.CidadeOutput;
 import br.com.algaworks.algafoodapi.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
@@ -11,13 +11,15 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class CidadeOutputConverter extends RepresentationModelAssemblerSupport<Cidade, CidadeOutput> {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private AlgaLinks algaLinks;
 
     public CidadeOutputConverter() {
         super(CidadeController.class, CidadeOutput.class);
@@ -30,15 +32,9 @@ public class CidadeOutputConverter extends RepresentationModelAssemblerSupport<C
 
         modelMapper.map(cidade, cidadeModelOutput);
 
-//        CidadeOutput cidadeOutput = modelMapper.map(cidade, CidadeOutput.class);
+        cidadeModelOutput.add(algaLinks.linkToCidades("cidades"));
+        cidadeModelOutput.getEstado().add(algaLinks.linkToEstado(cidadeModelOutput.getEstado().getId()));
 
-//        cidadeOutput.add(linkTo(methodOn(CidadeController.class).buscarPeloId(cidadeOutput.getId()))
-//                .withSelfRel());
-
-        cidadeModelOutput.add(linkTo(methodOn(CidadeController.class).listar()).withRel("cidades"));
-
-        cidadeModelOutput.getEstado().add(linkTo(methodOn(EstadoController.class).buscarPeloId(cidadeModelOutput.getEstado().getId()))
-                .withSelfRel());
         return cidadeModelOutput;
     }
 

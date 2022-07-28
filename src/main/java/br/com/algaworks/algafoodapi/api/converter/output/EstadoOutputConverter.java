@@ -1,5 +1,6 @@
 package br.com.algaworks.algafoodapi.api.converter.output;
 
+import br.com.algaworks.algafoodapi.api.AlgaLinks;
 import br.com.algaworks.algafoodapi.api.controller.EstadoController;
 import br.com.algaworks.algafoodapi.api.model.dto.output.EstadoOutput;
 import br.com.algaworks.algafoodapi.domain.model.Estado;
@@ -10,13 +11,15 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class EstadoOutputConverter extends RepresentationModelAssemblerSupport<Estado, EstadoOutput> {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private AlgaLinks algaLinks;
 
     public EstadoOutputConverter() {
         super(EstadoController.class, EstadoOutput.class);
@@ -26,7 +29,7 @@ public class EstadoOutputConverter extends RepresentationModelAssemblerSupport<E
         EstadoOutput estadoModelOutput = createModelWithId(estado.getId(), estado);
         modelMapper.map(estado, estadoModelOutput);
 
-        estadoModelOutput.add(linkTo(methodOn(EstadoController.class).listar()).withRel("estados"));
+        estadoModelOutput.add(algaLinks.linkToEstados("estados"));
         return estadoModelOutput;
     }
 

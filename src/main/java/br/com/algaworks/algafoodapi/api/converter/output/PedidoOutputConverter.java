@@ -29,10 +29,15 @@ public class PedidoOutputConverter extends RepresentationModelAssemblerSupport<P
 
         pedidoModelOutput.add(algaLinks.linkToPedidos());
 
-        pedidoModelOutput.add(algaLinks.linkToConfirmarPedido(pedido.getCodigo(),"confirmar"));
-        pedidoModelOutput.add(algaLinks.linkToEntregarPedido(pedido.getCodigo(),"entregar"));
-        pedidoModelOutput.add(algaLinks.linkToCancelarPedido(pedido.getCodigo(),"cancelar"));
-
+        if (pedido.podeSerConfirmado()) {
+            pedidoModelOutput.add(algaLinks.linkToConfirmarPedido(pedido.getCodigo(), "confirmar"));
+        }
+        if (pedido.podeSerEntregue()) {
+            pedidoModelOutput.add(algaLinks.linkToEntregarPedido(pedido.getCodigo(), "entregar"));
+        }
+        if (pedido.podeSerCancelado()) {
+            pedidoModelOutput.add(algaLinks.linkToCancelarPedido(pedido.getCodigo(), "cancelar"));
+        }
         pedidoModelOutput.getRestaurante().add(
                 algaLinks.linkToRestaurante(pedido.getRestaurante().getId()));
 

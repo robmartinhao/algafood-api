@@ -42,6 +42,25 @@ public class RestauranteOutputConverter extends RepresentationModelAssemblerSupp
         restauranteOutput.add(algaLinks.linkToRestauranteResponsaveis(restaurante.getId(),
                 "responsaveis"));
 
+        if (restaurante.ativacaoPermitida()) {
+            restauranteOutput.add(
+                    algaLinks.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
+        }
+
+        if (restaurante.inativacaoPermitida()) {
+            restauranteOutput.add(
+                    algaLinks.linkToRestauranteInativacao(restaurante.getId(), "inativar"));
+        }
+
+        if (restaurante.aberturaPermitida()) {
+            restauranteOutput.add(
+                    algaLinks.linkToRestauranteAbertura(restaurante.getId(), "abrir"));
+        }
+
+        if (restaurante.fechamentoPermitido()) {
+            restauranteOutput.add(
+                    algaLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
+        }
         return restauranteOutput;
     }
 

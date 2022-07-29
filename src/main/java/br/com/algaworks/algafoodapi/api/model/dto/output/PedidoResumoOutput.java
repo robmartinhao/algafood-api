@@ -1,6 +1,5 @@
 package br.com.algaworks.algafoodapi.api.model.dto.output;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +32,8 @@ public class PedidoResumoOutput extends RepresentationModel<PedidoResumoOutput> 
 
     @ApiModelProperty(example = "2019-12-01T20:34:04Z")
     private OffsetDateTime dataCriacao;
-    private RestauranteResumoOutput restaurante;
+    private RestauranteResumoOutput restauranteResumoOutput;
     private UsuarioOutput cliente;
+
+    private RestauranteApenasNomeOutput restaurante;
 }

@@ -1,27 +1,53 @@
 package br.com.algaworks.algafoodapi.api.converter.output;
 
+import br.com.algaworks.algafoodapi.api.AlgaLinks;
+import br.com.algaworks.algafoodapi.api.controller.RestauranteController;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
-public class RestauranteOutputConverter {
+public class RestauranteOutputConverter extends RepresentationModelAssemblerSupport<Restaurante, RestauranteOutput> {
 
     @Autowired
     private ModelMapper modelMapper;
 
-    public RestauranteOutput toRestauranteOutput(Restaurante restaurante) {
-        return  modelMapper.map(restaurante, RestauranteOutput.class);
+    @Autowired
+    private AlgaLinks algaLinks;
+
+    public RestauranteOutputConverter() {
+        super(RestauranteController.class, RestauranteOutput.class);
     }
 
-    public List<RestauranteOutput> toCollectionRestauranteOutput(List<Restaurante> restaurantes) {
-        return restaurantes.stream()
-                .map(restaurante -> toRestauranteOutput(restaurante))
-                .collect(Collectors.toList());
+    @Override
+    public RestauranteOutput toModel(Restaurante restaurante) {
+        RestauranteOutput restauranteOutput = createModelWithId(restaurante.getId(), restaurante);
+        modelMapper.map(restaurante, restauranteOutput);
+
+        restauranteOutput.add(algaLinks.linkToRestaurantes("restaurantes"));
+
+        restauranteOutput.getCozinha().add(
+                algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
+
+        restauranteOutput.getEndereco().getCidade().add(
+                algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+
+        restauranteOutput.add(algaLinks.linkToRestauranteFormasPagamento(restaurante.getId(),
+                "formas-pagamento"));
+
+        restauranteOutput.add(algaLinks.linkToRestauranteResponsaveis(restaurante.getId(),
+                "responsaveis"));
+
+        return restauranteOutput;
+    }
+
+    @Override
+    public CollectionModel<RestauranteOutput> toCollectionModel(Iterable<? extends Restaurante> entities) {
+        return super.toCollectionModel(entities)
+                .add(algaLinks.linkToRestaurantes());
     }
 }

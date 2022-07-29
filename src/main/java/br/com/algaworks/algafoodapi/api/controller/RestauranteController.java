@@ -2,9 +2,13 @@ package br.com.algaworks.algafoodapi.api.controller;
 
 import br.com.algaworks.algafoodapi.api.converter.domain.RestauranteDomainConverter;
 import br.com.algaworks.algafoodapi.api.converter.input.RestauranteInputConverter;
+import br.com.algaworks.algafoodapi.api.converter.output.RestauranteApenasNomeOutputConverter;
+import br.com.algaworks.algafoodapi.api.converter.output.RestauranteBasicoOutputConverter;
 import br.com.algaworks.algafoodapi.api.converter.output.RestauranteOutputConverter;
 import br.com.algaworks.algafoodapi.api.converter.output.view.RestauranteView;
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
+import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteApenasNomeOutput;
+import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteBasicoOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
 import br.com.algaworks.algafoodapi.api.openapi.controller.RestauranteControllerOpenApi;
 import br.com.algaworks.algafoodapi.domain.exception.*;
@@ -16,8 +20,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
@@ -47,21 +53,26 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     @Autowired
     private RestauranteInputConverter restauranteInputConverter;
 
-
     @Autowired
     private RestauranteDomainConverter restauranteDomainConverter;
 
-    @JsonView(RestauranteView.Resumo.class)
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<RestauranteOutput> listar() {
+    @Autowired
+    private RestauranteBasicoOutputConverter restauranteBasicoOutputConverter;
 
-        return restauranteOutputConverter.toCollectionRestauranteOutput(restauranteRepository.findAll());
+    @Autowired
+    private RestauranteApenasNomeOutputConverter restauranteApenasNomeOutputConverter;
+
+//    @JsonView(RestauranteView.Resumo.class)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public CollectionModel<RestauranteBasicoOutput> listar() {
+
+        return restauranteBasicoOutputConverter.toCollectionModel(restauranteRepository.findAll());
     }
 
-    @JsonView(RestauranteView.ApenasNome.class)
-    @GetMapping(params = "projecao=apenas-nome")
-    public List<RestauranteOutput> listarApenasNomes() {
-        return listar();
+//    @JsonView(RestauranteView.ApenasNome.class)
+    @GetMapping(params = "projecao=apenas-nome", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CollectionModel<RestauranteApenasNomeOutput> listarApenasNomes() {
+        return restauranteApenasNomeOutputConverter.toCollectionModel(restauranteRepository.findAll());
     }
 
 //    @GetMapping
@@ -103,7 +114,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     public RestauranteOutput buscarPeloId(@PathVariable Long id) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(id);
 
-        return restauranteOutputConverter.toRestauranteOutput(restaurante);
+        return restauranteOutputConverter.toModel(restaurante);
     }
 
     @Autowired
@@ -114,7 +125,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     public RestauranteOutput salvar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
             Restaurante restaurante = restauranteDomainConverter.toDomainObject(restauranteInput);
-            return restauranteOutputConverter.toRestauranteOutput(restauranteService.salvar(restaurante));
+            return restauranteOutputConverter.toModel(restauranteService.salvar(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
@@ -127,7 +138,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 
             restauranteDomainConverter.copyToDomainObject(restauranteInput, restauranteEncontrado);
 
-            return restauranteOutputConverter.toRestauranteOutput(restauranteService.salvar(restauranteEncontrado));
+            return restauranteOutputConverter.toModel(restauranteService.salvar(restauranteEncontrado));
         } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
@@ -189,14 +200,16 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 
     @PutMapping("/{id}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void ativar(@PathVariable Long id) {
+    public ResponseEntity<Void> ativar(@PathVariable Long id) {
         restauranteService.ativar(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inativar(@PathVariable Long id) {
+    public ResponseEntity<Void> inativar(@PathVariable Long id) {
         restauranteService.inativar(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/ativacoes")
@@ -221,13 +234,15 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 
     @PutMapping("/{restauranteId}/fechamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void fechamento(@PathVariable Long restauranteId) {
+    public ResponseEntity<Void> fechamento(@PathVariable Long restauranteId) {
         restauranteService.fechar(restauranteId);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{restauranteId}/abertura")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void abertura(@PathVariable Long restauranteId) {
+    public ResponseEntity<Void> abertura(@PathVariable Long restauranteId) {
         restauranteService.abrir(restauranteId);
+        return ResponseEntity.noContent().build();
     }
 }

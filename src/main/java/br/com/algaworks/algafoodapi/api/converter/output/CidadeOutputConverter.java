@@ -41,6 +41,6 @@ public class CidadeOutputConverter extends RepresentationModelAssemblerSupport<C
     @Override
     public CollectionModel<CidadeOutput> toCollectionModel(Iterable<? extends Cidade> entities) {
         return super.toCollectionModel(entities)
-            .add(linkTo(CidadeController.class).withSelfRel());
+            .add(algaLinks.linkToCidades());
     }
 }

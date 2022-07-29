@@ -41,6 +41,6 @@ public class UsuarioOutputConverter extends RepresentationModelAssemblerSupport<
     @Override
     public CollectionModel<UsuarioOutput> toCollectionModel(Iterable<? extends Usuario> entities) {
         return super.toCollectionModel(entities)
-                .add(linkTo(UsuarioController.class).withSelfRel());
+                .add(algaLinks.linkToUsuarios());
     }
 }

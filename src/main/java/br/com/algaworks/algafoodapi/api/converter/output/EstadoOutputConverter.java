@@ -36,6 +36,6 @@ public class EstadoOutputConverter extends RepresentationModelAssemblerSupport<E
     @Override
     public CollectionModel<EstadoOutput> toCollectionModel(Iterable<? extends Estado> entities) {
         return super.toCollectionModel(entities)
-                .add(linkTo(EstadoController.class).withSelfRel());
+                .add(algaLinks.linkToEstados());
     }
 }

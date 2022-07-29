@@ -27,7 +27,7 @@ public class PedidoOutputConverter extends RepresentationModelAssemblerSupport<P
         PedidoOutput pedidoModelOutput = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModelOutput);
 
-        pedidoModelOutput.add(algaLinks.linkToPedidos());
+        pedidoModelOutput.add(algaLinks.linkToPedidos("pedidos"));
 
         if (pedido.podeSerConfirmado()) {
             pedidoModelOutput.add(algaLinks.linkToConfirmarPedido(pedido.getCodigo(), "confirmar"));

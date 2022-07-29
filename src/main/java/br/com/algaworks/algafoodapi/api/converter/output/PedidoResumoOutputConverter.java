@@ -27,7 +27,7 @@ public class PedidoResumoOutputConverter extends RepresentationModelAssemblerSup
         PedidoResumoOutput pedidoModelOutput = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModelOutput);
 
-        pedidoModelOutput.add(algaLinks.linkToPedidos());
+        pedidoModelOutput.add(algaLinks.linkToPedidos("pedidos"));
 
         pedidoModelOutput.getRestaurante().add(algaLinks.linkToRestaurante(pedido.getRestaurante().getId()));
 

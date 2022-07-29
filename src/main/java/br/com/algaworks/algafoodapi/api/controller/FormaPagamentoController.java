@@ -11,6 +11,7 @@ import br.com.algaworks.algafoodapi.domain.model.FormaPagamento;
 import br.com.algaworks.algafoodapi.domain.repository.FormaPagamentoRepository;
 import br.com.algaworks.algafoodapi.domain.service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +22,6 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import javax.validation.Valid;
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -41,7 +41,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     private FormaPagamentoDomainConverter formaPagamentoDomainConverter;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<FormaPagamentoOutput>> listar(ServletWebRequest request) {
+    public ResponseEntity<CollectionModel<FormaPagamentoOutput>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
         String eTag = "0";
@@ -56,8 +56,8 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
             return null;
         }
 
-        List<FormaPagamentoOutput> formasPagamentoOutput = formaPagamentoOutputConverter
-                .toCollectionFormaPagamentoOutput(formaPagamentoRepository.findAll());
+        CollectionModel<FormaPagamentoOutput> formasPagamentoOutput = formaPagamentoOutputConverter
+                .toCollectionModel(formaPagamentoRepository.findAll());
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
                 .eTag(eTag)
@@ -81,7 +81,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         }
 
         FormaPagamentoOutput formaPagamentoOutput = formaPagamentoOutputConverter
-                .toFormaPagamentoOutput(formaPagamentoService.buscarOuFalhar(id));
+                .toModel(formaPagamentoService.buscarOuFalhar(id));
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
                 .eTag(eTag)
@@ -92,7 +92,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoOutput salvar(@Valid @RequestBody FormaPagamentoInput formaPagamentoInput) {
         FormaPagamento formaPagamento = formaPagamentoDomainConverter.toDomainObject(formaPagamentoInput);
-        return formaPagamentoOutputConverter.toFormaPagamentoOutput(formaPagamentoService.salvar(formaPagamento));
+        return formaPagamentoOutputConverter.toModel(formaPagamentoService.salvar(formaPagamento));
     }
 
     @PutMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -102,7 +102,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 
             formaPagamentoDomainConverter.copyToDomainObject(formaPagamentoInput, formaPagamentoEncontrada);
 
-            return formaPagamentoOutputConverter.toFormaPagamentoOutput(formaPagamentoService.salvar(formaPagamentoEncontrada));
+            return formaPagamentoOutputConverter.toModel(formaPagamentoService.salvar(formaPagamentoEncontrada));
 
         } catch (FormaDePagamentoNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);

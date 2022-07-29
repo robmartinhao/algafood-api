@@ -6,6 +6,7 @@ import br.com.algaworks.algafoodapi.api.openapi.controller.RestauranteFormaPagam
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +24,10 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     private FormaPagamentoOutputConverter formaPagamentoOutputConverter;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<FormaPagamentoOutput> listar(@PathVariable Long restauranteId) {
+    public CollectionModel<FormaPagamentoOutput> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 
-        return formaPagamentoOutputConverter.toCollectionFormaPagamentoOutput(restaurante.getFormasPagamento());
+        return formaPagamentoOutputConverter.toCollectionModel(restaurante.getFormasPagamento());
     }
 
     @DeleteMapping("/{formaPagamentoId}")

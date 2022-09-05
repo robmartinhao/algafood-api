@@ -4,6 +4,7 @@ import br.com.algaworks.algafoodapi.api.exceptionhandler.Problem;
 import br.com.algaworks.algafoodapi.api.model.dto.output.UsuarioOutput;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface RestauranteUsuarioControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurante ou usuário não encontrado",
                     response = Problem.class)
     })
-    void remover(
+    ResponseEntity<Void> remover(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
             Long restauranteId,
 
@@ -37,7 +38,7 @@ public interface RestauranteUsuarioControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurante ou usuário não encontrado",
                     response = Problem.class)
     })
-    void adicionar(
+    ResponseEntity<Void> adicionar(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
             Long restauranteId,
 

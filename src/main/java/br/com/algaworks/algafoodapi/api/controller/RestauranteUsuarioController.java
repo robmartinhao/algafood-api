@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,24 +26,37 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     @Autowired
     private AlgaLinks algaLinks;
 
+    @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioOutput> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 
-        return usuarioOutputConverter.toCollectionModel(restaurante.getResponsaveis())
+        CollectionModel<UsuarioOutput> usuariosModel = usuarioOutputConverter
+                .toCollectionModel(restaurante.getResponsaveis())
                 .removeLinks()
-                .add(algaLinks.linkToResponsaveisRestaurante(restauranteId));
+                .add(algaLinks.linkToRestauranteResponsaveis(restauranteId))
+                .add(algaLinks.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
+
+        usuariosModel.getContent().stream().forEach(usuarioModel -> {
+            usuarioModel.add(algaLinks.linkToRestauranteResponsavelDesassociacao(
+                    restauranteId, usuarioModel.getId(), "desassociar"));
+        });
+        return usuariosModel;
     }
 
+    @Override
     @PutMapping(value = "/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void adicionar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+    public ResponseEntity<Void> adicionar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.associarGrupo(restauranteId, usuarioId);
+        return ResponseEntity.noContent().build();
     }
 
+    @Override
     @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+    public ResponseEntity<Void> remover(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.desassociarGrupo(restauranteId, usuarioId);
+        return ResponseEntity.noContent().build();
     }
 }

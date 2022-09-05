@@ -30,18 +30,6 @@ public class RestauranteOutputConverter extends RepresentationModelAssemblerSupp
 
         restauranteOutput.add(algaLinks.linkToRestaurantes("restaurantes"));
 
-        restauranteOutput.getCozinha().add(
-                algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
-
-        restauranteOutput.getEndereco().getCidade().add(
-                algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
-
-        restauranteOutput.add(algaLinks.linkToRestauranteFormasPagamento(restaurante.getId(),
-                "formas-pagamento"));
-
-        restauranteOutput.add(algaLinks.linkToRestauranteResponsaveis(restaurante.getId(),
-                "responsaveis"));
-
         if (restaurante.ativacaoPermitida()) {
             restauranteOutput.add(
                     algaLinks.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
@@ -61,12 +49,24 @@ public class RestauranteOutputConverter extends RepresentationModelAssemblerSupp
             restauranteOutput.add(
                     algaLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
         }
-        return restauranteOutput;
-    }
 
-    @Override
-    public CollectionModel<RestauranteOutput> toCollectionModel(Iterable<? extends Restaurante> entities) {
-        return super.toCollectionModel(entities)
-                .add(algaLinks.linkToRestaurantes());
+        restauranteOutput.add(algaLinks.linkToProdutos(restaurante.getId(), "produtos"));
+
+        restauranteOutput.getCozinha().add(
+                algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
+
+        if (restauranteOutput.getEndereco() != null
+                && restauranteOutput.getEndereco().getCidade() != null) {
+            restauranteOutput.getEndereco().getCidade().add(
+                    algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+        }
+
+        restauranteOutput.add(algaLinks.linkToRestauranteFormasPagamento(restaurante.getId(),
+                "formas-pagamento"));
+
+        restauranteOutput.add(algaLinks.linkToRestauranteResponsaveis(restaurante.getId(),
+                "responsaveis"));
+
+        return restauranteOutput;
     }
 }

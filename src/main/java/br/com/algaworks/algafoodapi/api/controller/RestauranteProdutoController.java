@@ -56,7 +56,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
                 .add(algaLinks.linkToProdutos(restauranteId));
     }
 
-    @GetMapping(value = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{produtoId}")
     public ProdutoOutput buscarPeloId(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         Produto produto = produtoService.buscarOuFalhar(restauranteId, produtoId);
 

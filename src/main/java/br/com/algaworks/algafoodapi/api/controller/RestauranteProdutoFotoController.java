@@ -54,7 +54,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
         FotoProduto fotoSalva = catalogoFotoProdutoService.salvar(foto, arquivo.getInputStream());
 
-        return fotoProdutoOutputConverter.toFotoProdutoOutput(fotoSalva);
+        return fotoProdutoOutputConverter.toModel(fotoSalva);
     }
 
     @DeleteMapping
@@ -66,7 +66,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoOutput pesquisar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         FotoProduto fotoEncontrada = catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
-        return fotoProdutoOutputConverter.toFotoProdutoOutput(fotoEncontrada);
+        return fotoProdutoOutputConverter.toModel(fotoEncontrada);
     }
 
     @GetMapping(produces = MediaType.ALL_VALUE)

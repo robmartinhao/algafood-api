@@ -240,4 +240,13 @@ public class AlgaLinks {
         return linkTo(methodOn(RestauranteUsuarioController.class)
                 .remover(restauranteId, null)).withRel(rel);
     }
+
+    public Link linkToFotoProduto(Long restauranteId, Long produtoId, String rel) {
+        return linkTo(methodOn(RestauranteProdutoFotoController.class)
+                .pesquisar(restauranteId, produtoId)).withRel(rel);
+    }
+
+    public Link linkToFotoProduto(Long restauranteId, Long produtoId) {
+        return linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
+    }
 }

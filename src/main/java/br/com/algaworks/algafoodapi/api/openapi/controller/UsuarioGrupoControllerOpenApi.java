@@ -3,8 +3,7 @@ package br.com.algaworks.algafoodapi.api.openapi.controller;
 import br.com.algaworks.algafoodapi.api.exceptionhandler.Problem;
 import br.com.algaworks.algafoodapi.api.model.dto.output.GrupoOutput;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Usuários")
 public interface UsuarioGrupoControllerOpenApi {
@@ -13,7 +12,7 @@ public interface UsuarioGrupoControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Usuário não encontrado", response = Problem.class)
     })
-    List<GrupoOutput> listar(
+    CollectionModel<GrupoOutput> listar(
             @ApiParam(value = "ID do usuário", example = "1", required = true)
             Long usuarioId);
 

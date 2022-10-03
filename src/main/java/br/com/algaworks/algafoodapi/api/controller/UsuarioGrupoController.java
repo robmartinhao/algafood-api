@@ -5,6 +5,7 @@ import br.com.algaworks.algafoodapi.api.model.dto.output.GrupoOutput;
 import br.com.algaworks.algafoodapi.domain.model.Usuario;
 import br.com.algaworks.algafoodapi.domain.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +22,12 @@ public class UsuarioGrupoController {
     @Autowired
     private GrupoOutputConverter grupoOutputConverter;
 
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<GrupoOutput> listar(@PathVariable Long usuarioId) {
+    public CollectionModel<GrupoOutput> listar(@PathVariable Long usuarioId) {
         Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
 
-        return grupoOutputConverter.toCollectionGrupoOutput(usuario.getGrupos());
+        return grupoOutputConverter.toCollectionModel(usuario.getGrupos()).removeLinks();
     }
 
     @PutMapping("/{grupoId}")

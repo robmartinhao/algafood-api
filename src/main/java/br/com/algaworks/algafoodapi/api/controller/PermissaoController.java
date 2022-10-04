@@ -1,5 +1,8 @@
 package br.com.algaworks.algafoodapi.api.controller;
 
+import br.com.algaworks.algafoodapi.api.converter.output.PermissaoOutputConverter;
+import br.com.algaworks.algafoodapi.api.model.dto.output.PermissaoOutput;
+import br.com.algaworks.algafoodapi.api.openapi.controller.PermissaoControllerOpenApi;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Permissao;
@@ -7,6 +10,7 @@ import br.com.algaworks.algafoodapi.domain.repository.PermissaoRepository;
 import br.com.algaworks.algafoodapi.domain.service.PermissaoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/permissao")
-public class PermissaoController {
+public class PermissaoController implements PermissaoControllerOpenApi {
 
     @Autowired
     private PermissaoRepository permissaoRepository;
@@ -24,9 +28,12 @@ public class PermissaoController {
     @Autowired
     private PermissaoService permissaoService;
 
+    @Autowired
+    private PermissaoOutputConverter permissaoOutputConverter;
+
     @GetMapping
-    public List<Permissao> listar() {
-        return permissaoRepository.findAll();
+    public CollectionModel<PermissaoOutput> listar() {
+        return permissaoOutputConverter.toCollectionModel(permissaoRepository.findAll());
     }
 
     @GetMapping("/{id}")

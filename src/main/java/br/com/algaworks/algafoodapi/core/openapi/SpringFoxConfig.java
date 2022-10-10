@@ -1,12 +1,10 @@
 package br.com.algaworks.algafoodapi.core.openapi;
 
 import br.com.algaworks.algafoodapi.api.exceptionhandler.Problem;
+import br.com.algaworks.algafoodapi.api.model.dto.output.CidadeOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.CozinhaOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.PedidoResumoOutput;
-import br.com.algaworks.algafoodapi.api.openapi.model.CozinhasModelOpenApi;
-import br.com.algaworks.algafoodapi.api.openapi.model.LinksModelApi;
-import br.com.algaworks.algafoodapi.api.openapi.model.PageableModelOpenApi;
-import br.com.algaworks.algafoodapi.api.openapi.model.PedidosResumoModelOpenApi;
+import br.com.algaworks.algafoodapi.api.openapi.model.*;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -74,6 +73,8 @@ public class SpringFoxConfig {
                         TypeResolver.resolve(Page.class, CozinhaOutput.class), CozinhasModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         TypeResolver.resolve(Page.class, PedidoResumoOutput.class), PedidosResumoModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        TypeResolver.resolve(CollectionModel.class, CidadeOutput.class), CidadesModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Grupos", "Gerencia os grupos de usuários"),

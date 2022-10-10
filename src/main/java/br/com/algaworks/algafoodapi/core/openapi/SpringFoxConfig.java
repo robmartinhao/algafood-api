@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.core.openapi;
 import br.com.algaworks.algafoodapi.api.exceptionhandler.Problem;
 import br.com.algaworks.algafoodapi.api.model.dto.output.CidadeOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.CozinhaOutput;
+import br.com.algaworks.algafoodapi.api.model.dto.output.EstadoOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.PedidoResumoOutput;
 import br.com.algaworks.algafoodapi.api.openapi.model.*;
 import com.fasterxml.classmate.TypeResolver;
@@ -77,6 +78,9 @@ public class SpringFoxConfig {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         TypeResolver.resolve(CollectionModel.class, CidadeOutput.class), CidadesModelOpenApi.class))
                 .apiInfo(apiInfo())
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        TypeResolver.resolve(CollectionModel.class, EstadoOutput.class),
+                        EstadosModelOpenApi.class))
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Grupos", "Gerencia os grupos de usuários"),
                         new Tag("Cozinhas", "Gerencia as cozinhas"),

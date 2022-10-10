@@ -4,6 +4,7 @@ import br.com.algaworks.algafoodapi.api.exceptionhandler.Problem;
 import br.com.algaworks.algafoodapi.api.model.dto.output.CozinhaOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.PedidoResumoOutput;
 import br.com.algaworks.algafoodapi.api.openapi.model.CozinhasModelOpenApi;
+import br.com.algaworks.algafoodapi.api.openapi.model.LinksModelApi;
 import br.com.algaworks.algafoodapi.api.openapi.model.PageableModelOpenApi;
 import br.com.algaworks.algafoodapi.api.openapi.model.PedidosResumoModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Links;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -67,6 +69,7 @@ public class SpringFoxConfig {
                 .additionalModels(TypeResolver.resolve(Problem.class))
                 .ignoredParameterTypes(ServletWebRequest.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         TypeResolver.resolve(Page.class, CozinhaOutput.class), CozinhasModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(

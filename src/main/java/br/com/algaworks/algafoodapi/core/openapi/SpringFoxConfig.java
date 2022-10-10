@@ -77,6 +77,12 @@ public class SpringFoxConfig {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         TypeResolver.resolve(CollectionModel.class, FormaPagamentoOutput.class),
                         FormasPagamentoModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        TypeResolver.resolve(CollectionModel.class, GrupoOutput.class),
+                        GruposModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        TypeResolver.resolve(CollectionModel.class, GrupoOutput.class),
+                        PermissoesModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         TypeResolver.resolve(CollectionModel.class, EstadoOutput.class),

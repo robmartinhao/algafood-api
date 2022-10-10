@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+import static br.com.algaworks.algafoodapi.api.controller.EstatisticasController.EstatisticasModel;
+
 @Api(tags = "Estatísticas")
 public interface EstatisticasControllerOpenApi {
 
@@ -29,4 +31,7 @@ public interface EstatisticasControllerOpenApi {
     ResponseEntity<byte[]> consultarVendasDiariasPdf(
             VendaDiariaFilter filtro,
             String timeOffset);
+
+    @ApiOperation(value = "Estatísticas", hidden = true)
+    EstatisticasModel estatisticas();
 }

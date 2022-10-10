@@ -1,10 +1,7 @@
 package br.com.algaworks.algafoodapi.core.openapi;
 
 import br.com.algaworks.algafoodapi.api.exceptionhandler.Problem;
-import br.com.algaworks.algafoodapi.api.model.dto.output.CidadeOutput;
-import br.com.algaworks.algafoodapi.api.model.dto.output.CozinhaOutput;
-import br.com.algaworks.algafoodapi.api.model.dto.output.EstadoOutput;
-import br.com.algaworks.algafoodapi.api.model.dto.output.PedidoResumoOutput;
+import br.com.algaworks.algafoodapi.api.model.dto.output.*;
 import br.com.algaworks.algafoodapi.api.openapi.model.*;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -77,6 +74,9 @@ public class SpringFoxConfig {
                         TypeResolver.resolve(Page.class, PedidoResumoOutput.class), PedidosResumoModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         TypeResolver.resolve(CollectionModel.class, CidadeOutput.class), CidadesModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        TypeResolver.resolve(CollectionModel.class, FormaPagamentoOutput.class),
+                        FormasPagamentoModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         TypeResolver.resolve(CollectionModel.class, EstadoOutput.class),

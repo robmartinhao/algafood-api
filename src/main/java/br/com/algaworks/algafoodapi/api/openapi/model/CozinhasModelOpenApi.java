@@ -12,7 +12,7 @@ import java.util.List;
 @ApiModel("CozinhasModel")
 @Getter
 @Setter
-public class CozinhasModelOpenApi extends PagedModelOpenApi<CozinhaOutput> {
+public class CozinhasModelOpenApi {
 
     private CozinhasModelOpenApi.CozinhaEmbeddedModelOpenApi _embedded;
     private Links _links;

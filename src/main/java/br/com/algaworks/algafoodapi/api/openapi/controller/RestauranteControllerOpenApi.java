@@ -1,16 +1,14 @@
 package br.com.algaworks.algafoodapi.api.openapi.controller;
 
-import br.com.algaworks.algafoodapi.api.converter.output.view.RestauranteView;
 import br.com.algaworks.algafoodapi.api.exceptionhandler.Problem;
 import br.com.algaworks.algafoodapi.api.model.dto.input.RestauranteInput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteApenasNomeOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteBasicoOutput;
 import br.com.algaworks.algafoodapi.api.model.dto.output.RestauranteOutput;
-import br.com.algaworks.algafoodapi.api.openapi.model.RestauranteBasicoModelOpenApi;
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -24,6 +22,7 @@ public interface RestauranteControllerOpenApi {
     })
     CollectionModel<RestauranteBasicoOutput> listar();
 
+    @ApiIgnore
     @ApiOperation(value = "Lista restaurantes", hidden = true)
     CollectionModel<RestauranteApenasNomeOutput> listarApenasNomes();
 

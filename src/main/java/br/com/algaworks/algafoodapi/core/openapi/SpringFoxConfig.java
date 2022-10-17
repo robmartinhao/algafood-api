@@ -1,8 +1,8 @@
 package br.com.algaworks.algafoodapi.core.openapi;
 
 import br.com.algaworks.algafoodapi.api.exceptionhandler.Problem;
-import br.com.algaworks.algafoodapi.api.model.dto.output.*;
-import br.com.algaworks.algafoodapi.api.openapi.model.*;
+import br.com.algaworks.algafoodapi.api.v1.model.dto.output.*;
+import br.com.algaworks.algafoodapi.api.v1.openapi.model.*;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;

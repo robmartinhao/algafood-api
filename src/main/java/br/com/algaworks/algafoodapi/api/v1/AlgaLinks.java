@@ -1,11 +1,10 @@
 package br.com.algaworks.algafoodapi.api.v1;
 
-import br.com.algaworks.algafoodapi.api.controller.*;
 import br.com.algaworks.algafoodapi.api.v1.controller.*;
 import org.springframework.hateoas.*;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.TemplateVariable.*;
+import static org.springframework.hateoas.TemplateVariable.VariableType;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 

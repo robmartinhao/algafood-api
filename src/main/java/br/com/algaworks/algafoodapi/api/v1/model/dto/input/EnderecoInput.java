@@ -1,5 +1,6 @@
 package br.com.algaworks.algafoodapi.api.v1.model.dto.input;
 
+import br.com.algaworks.algafoodapi.api.v2.model.input.CidadeInputV2;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,5 +34,5 @@ public class EnderecoInput {
 
     @Valid
     @NotNull
-    private CidadeIdIpunt cidade;
+    private CidadeInputV2 cidade;
 }

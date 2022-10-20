@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/permissao")
+@RequestMapping("/v1/permissao")
 public class PermissaoController implements PermissaoControllerOpenApi {
 
     @Autowired

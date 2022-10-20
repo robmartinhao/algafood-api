@@ -3,8 +3,8 @@ package br.com.algaworks.algafoodapi.api.v1.controller;
 import br.com.algaworks.algafoodapi.api.v1.converter.domain.UsuarioDomainConverter;
 import br.com.algaworks.algafoodapi.api.v1.converter.output.UsuarioOutputConverter;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.SenhaInput;
-import br.com.algaworks.algafoodapi.api.v1.model.dto.input.UsuarioInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.UsuarioComSenhaInput;
+import br.com.algaworks.algafoodapi.api.v1.model.dto.input.UsuarioInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.UsuarioOutput;
 import br.com.algaworks.algafoodapi.domain.model.Usuario;
 import br.com.algaworks.algafoodapi.domain.repository.UsuarioRepository;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/v1/usuarios")
 public class UsuarioController {
 
     @Autowired

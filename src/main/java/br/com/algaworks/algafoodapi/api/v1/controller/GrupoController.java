@@ -1,10 +1,10 @@
 package br.com.algaworks.algafoodapi.api.v1.controller;
 
-import br.com.algaworks.algafoodapi.api.v1.openapi.controller.GrupoControllerOpenApi;
 import br.com.algaworks.algafoodapi.api.v1.converter.domain.GrupoDomainConverter;
 import br.com.algaworks.algafoodapi.api.v1.converter.output.GrupoOutputConverter;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.GrupoInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.GrupoOutput;
+import br.com.algaworks.algafoodapi.api.v1.openapi.controller.GrupoControllerOpenApi;
 import br.com.algaworks.algafoodapi.domain.model.Grupo;
 import br.com.algaworks.algafoodapi.domain.repository.GrupoRepository;
 import br.com.algaworks.algafoodapi.domain.service.GrupoService;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/grupos")
+@RequestMapping(path = "/v1/grupos")
 public class GrupoController implements GrupoControllerOpenApi {
 
     @Autowired

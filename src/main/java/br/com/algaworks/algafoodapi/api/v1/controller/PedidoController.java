@@ -11,10 +11,10 @@ import br.com.algaworks.algafoodapi.core.data.PageWrapper;
 import br.com.algaworks.algafoodapi.core.data.PageableTranslator;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
+import br.com.algaworks.algafoodapi.domain.filter.PedidoFilter;
 import br.com.algaworks.algafoodapi.domain.model.Pedido;
 import br.com.algaworks.algafoodapi.domain.model.Usuario;
 import br.com.algaworks.algafoodapi.domain.repository.PedidoRepository;
-import br.com.algaworks.algafoodapi.domain.filter.PedidoFilter;
 import br.com.algaworks.algafoodapi.domain.service.EmissaoPedidoService;
 import br.com.algaworks.algafoodapi.infrastructure.repository.spec.PedidoSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/pedidos")
+@RequestMapping("/v1/pedidos")
 public class PedidoController implements PedidoControllerOpenApi {
 
     @Autowired

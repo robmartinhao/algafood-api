@@ -1,6 +1,5 @@
 package br.com.algaworks.algafoodapi.api.v2.model;
 
-import br.com.algaworks.algafoodapi.api.v1.model.dto.output.EstadoOutput;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;

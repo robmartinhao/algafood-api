@@ -51,7 +51,7 @@ public interface FormaPagamentoControllerOpenApi {
             @ApiResponse(code = 204, message = "Forma de pagamento excluída"),
             @ApiResponse(code = 404, message = "Forma de pagamento não encontrada", response = Problem.class)
     })
-    void remover(
+    ResponseEntity<Void> remover(
             @ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true)
             Long formaPagamentoId);
 }

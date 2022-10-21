@@ -5,6 +5,7 @@ import br.com.algaworks.algafoodapi.api.v1.model.dto.input.GrupoInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.GrupoOutput;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Grupos")
 public interface GrupoControllerOpenApi {
@@ -45,7 +46,7 @@ public interface GrupoControllerOpenApi {
             @ApiResponse(code = 204, message = "Grupo excluído"),
             @ApiResponse(code = 404, message = "Grupo não encontrado", response = Problem.class)
     })
-    void remover(
+    ResponseEntity<Void> remover(
             @ApiParam(value = "ID de um grupo", example = "1", required = true)
             Long grupoId);
 }

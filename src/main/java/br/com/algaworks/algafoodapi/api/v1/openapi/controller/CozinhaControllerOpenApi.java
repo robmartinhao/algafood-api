@@ -6,6 +6,7 @@ import br.com.algaworks.algafoodapi.api.v1.model.dto.output.CozinhaOutput;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Cozinhas")
 public interface CozinhaControllerOpenApi {
@@ -47,7 +48,7 @@ public interface CozinhaControllerOpenApi {
             @ApiResponse(code = 204, message = "Cozinha excluída"),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    void remover(
+    ResponseEntity<Void> remover(
             @ApiParam(value = "ID de uma cozinha", example = "1", required = true)
             Long cozinhaId);
 }

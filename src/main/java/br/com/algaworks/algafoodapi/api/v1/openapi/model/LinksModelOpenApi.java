@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel("Links")
-public class LinksModelApi {
+public class LinksModelOpenApi {
 
     private LinkModel rel;
 

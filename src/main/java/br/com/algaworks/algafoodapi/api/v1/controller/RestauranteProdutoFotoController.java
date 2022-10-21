@@ -59,8 +59,9 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+    public ResponseEntity<Void> excluir(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         catalogoFotoProdutoService.excluir(restauranteId, produtoId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

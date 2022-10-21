@@ -212,22 +212,24 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 
     @PutMapping("/ativacoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+    public ResponseEntity<Void> ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
         try {
             restauranteService.ativar(restaurantesIds);
         } catch (RestauranteNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/ativacoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+    public ResponseEntity<Void> inativarMultiplos(@RequestBody List<Long> restaurantesIds) {
         try {
             restauranteService.inativar(restaurantesIds);
         } catch (RestauranteNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{restauranteId}/fechamento")

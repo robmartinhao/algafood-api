@@ -16,6 +16,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -74,7 +75,8 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long id) {
+    public ResponseEntity<Void> remover(@PathVariable Long id) {
         cozinhaService.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 }

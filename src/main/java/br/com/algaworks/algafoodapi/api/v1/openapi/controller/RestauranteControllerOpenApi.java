@@ -78,7 +78,7 @@ public interface RestauranteControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 204, message = "Restaurantes ativados com sucesso")
     })
-    void ativarMultiplos(
+    ResponseEntity<Void> ativarMultiplos(
             @ApiParam(name = "corpo", value = "IDs de restaurantes", required = true)
             List<Long> restauranteIds);
 
@@ -86,7 +86,7 @@ public interface RestauranteControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 204, message = "Restaurantes ativados com sucesso")
     })
-    void inativarMultiplos(
+    ResponseEntity<Void> inativarMultiplos(
             @ApiParam(name = "corpo", value = "IDs de restaurantes", required = true)
             List<Long> restauranteIds);
 

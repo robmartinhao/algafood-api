@@ -6,6 +6,7 @@ import br.com.algaworks.algafoodapi.api.v1.model.dto.input.UsuarioComSenhaInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.UsuarioInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.UsuarioOutput;
 import io.swagger.annotations.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -49,7 +50,7 @@ public interface UsuarioControllerOpenApi {
             @ApiResponse(code = 204, message = "Senha alterada com sucesso"),
             @ApiResponse(code = 404, message = "Usuário não encontrado", response = Problem.class)
     })
-    void atualizarSenha(
+    ResponseEntity<Void> atualizarSenha(
             @ApiParam(value = "ID do usuário", example = "1", required = true)
             Long usuarioId,
 

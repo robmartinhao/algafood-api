@@ -112,7 +112,8 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long id) {
+    public ResponseEntity<Void> remover(@PathVariable Long id) {
         formaPagamentoService.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 }

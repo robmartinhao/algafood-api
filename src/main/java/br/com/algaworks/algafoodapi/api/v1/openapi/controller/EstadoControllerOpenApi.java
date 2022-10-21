@@ -5,6 +5,7 @@ import br.com.algaworks.algafoodapi.api.v1.model.dto.input.EstadoInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.EstadoOutput;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Estados")
 public interface EstadoControllerOpenApi {
@@ -46,7 +47,7 @@ public interface EstadoControllerOpenApi {
             @ApiResponse(code = 204, message = "Estado excluído"),
             @ApiResponse(code = 404, message = "Estado não encontrado", response = Problem.class)
     })
-    void remover(
+    ResponseEntity<Void> remover(
             @ApiParam(value = "ID de um estado", example = "1", required = true)
             Long estadoId);
 }

@@ -36,7 +36,7 @@ public interface RestauranteProdutoFotoControllerOpenApi {
             @ApiResponse(code = 400, message = "ID do restaurante ou produto inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Foto de produto não encontrada", response = Problem.class)
     })
-    void excluir(
+    ResponseEntity<Void> excluir(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
             Long restauranteId,
 

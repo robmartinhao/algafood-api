@@ -5,6 +5,7 @@ import br.com.algaworks.algafoodapi.api.v1.model.dto.input.CidadeInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.CidadeOutput;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Cidades")
 public interface CidadeControllerOpenApi {
@@ -40,7 +41,7 @@ public interface CidadeControllerOpenApi {
             @ApiResponse(code = 204, message = "Cidade excluída"),
             @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
     })
-    void remover(
+    ResponseEntity<Void> remover(
             @ApiParam(value = "ID de uma cidade", example = "1", required = true)
             Long id);
 }

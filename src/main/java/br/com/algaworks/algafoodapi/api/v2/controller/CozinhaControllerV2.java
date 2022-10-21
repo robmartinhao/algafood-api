@@ -4,6 +4,7 @@ import br.com.algaworks.algafoodapi.api.v2.converter.CozinhaDomainConverterV2;
 import br.com.algaworks.algafoodapi.api.v2.converter.CozinhaOutputConverterV2;
 import br.com.algaworks.algafoodapi.api.v2.model.CozinhaOutputV2;
 import br.com.algaworks.algafoodapi.api.v2.model.input.CozinhaInputV2;
+import br.com.algaworks.algafoodapi.api.v2.openapi.controller.CozinhaControllerV2OpenApi;
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.algaworks.algafoodapi.domain.service.CozinhaService;
@@ -15,13 +16,14 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/v2/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaControllerV2 {
+public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
@@ -73,7 +75,8 @@ public class CozinhaControllerV2 {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long id) {
+    public ResponseEntity<Void> remover(@PathVariable Long id) {
         cozinhaService.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 }

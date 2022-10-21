@@ -5,6 +5,7 @@ import br.com.algaworks.algafoodapi.api.v2.converter.CidadeDomainConverterV2;
 import br.com.algaworks.algafoodapi.api.v2.converter.CidadeOutputConverterV2;
 import br.com.algaworks.algafoodapi.api.v2.model.CidadeOutputV2;
 import br.com.algaworks.algafoodapi.api.v2.model.input.CidadeInputV2;
+import br.com.algaworks.algafoodapi.api.v2.openapi.controller.CidadeControllerV2OpenApi;
 import br.com.algaworks.algafoodapi.domain.exception.EstadoNaoEncontradoException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.model.Cidade;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
 
     @Autowired
     private CidadeRepository cidadeRepository;

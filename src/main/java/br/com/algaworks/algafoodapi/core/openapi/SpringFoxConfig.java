@@ -223,8 +223,8 @@ public class SpringFoxConfig {
 
     private ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
-                .title("AlgaFood API")
-                .description("API aberta para clientes e restaurantes")
+                .title("AlgaFood API (Depreciada)")
+                .description("API aberta para clientes e restaurantes - Essa versão está depreciada")
                 .version("1")
                 .contact(new Contact("AlgaWorks", "https://www.algaworks.com", "contato@algaworks.com"))
                 .build();

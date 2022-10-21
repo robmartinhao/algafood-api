@@ -36,6 +36,7 @@ public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
     @Autowired
     private CidadeDomainConverterV2 cidadeDomainConverter;
 
+    @Deprecated
     @ApiOperation("Lista as cidades")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeOutputV2> listar() {

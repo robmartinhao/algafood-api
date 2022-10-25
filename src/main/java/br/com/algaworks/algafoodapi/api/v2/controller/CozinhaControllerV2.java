@@ -51,9 +51,9 @@ public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
         //logger.info("Consultando cozinhzas com páginas de {} registros...", pageable.getPageSize());
         log.info("Consultando cozinhzas com páginas de {} registros...", pageable.getPageSize());
 
-        if (true) {
-            throw new RuntimeException("Teste de Exception");
-        }
+//        if (true) {
+//            throw new RuntimeException("Teste de Exception");
+//        }
 
         Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 

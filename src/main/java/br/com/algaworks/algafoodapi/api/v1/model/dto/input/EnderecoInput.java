@@ -34,5 +34,5 @@ public class EnderecoInput {
 
     @Valid
     @NotNull
-    private CidadeInputV2 cidade;
+    private CozinhaIdInput cidade;
 }

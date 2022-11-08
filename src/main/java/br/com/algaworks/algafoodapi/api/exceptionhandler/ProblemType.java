@@ -11,7 +11,8 @@ public enum ProblemType {
     PARAMETRO_INVALIDO("/paramentro-invalido", "Parâmetro Inválido"),
     RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado","Recurso não encontrado"),
     ERRO_DE_SISTEMA("/erro-de-sistema", "Erro de Sistema"),
-    DADOS_INVALIDOS("/dados-invalidos","Dados inválidos" );
+    DADOS_INVALIDOS("/dados-invalidos","Dados inválidos" ),
+    ACESSO_NEGADO("/acesso-negado","Acesso Negado");
 
     private final String title;
     private final String uri;

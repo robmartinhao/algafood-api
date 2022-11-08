@@ -5,6 +5,8 @@ import br.com.algaworks.algafoodapi.api.v1.converter.output.CozinhaOutputConvert
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.CozinhaInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.CozinhaOutput;
 import br.com.algaworks.algafoodapi.api.v1.openapi.controller.CozinhaControllerOpenApi;
+import br.com.algaworks.algafoodapi.core.security.PodeConsultarCozinhas;
+import br.com.algaworks.algafoodapi.core.security.PodeEditarCozinhas;
 import br.com.algaworks.algafoodapi.domain.model.Cozinha;
 import br.com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import br.com.algaworks.algafoodapi.domain.service.CozinhaService;
@@ -41,7 +43,8 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
+    @PodeConsultarCozinhas
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<CozinhaOutput> listar(@PageableDefault(size = 2) Pageable pageable) {
 
@@ -53,14 +56,16 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaOutputPagedModel;
     }
 
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
+    @PodeConsultarCozinhas
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaOutput buscarPeloId(@PathVariable Long id) {
         Cozinha cozinha = cozinhaService.buscarOuFalhar(id);
         return cozinhaOutputConverter.toModel(cozinha);
     }
 
-    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+//    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+    @PodeEditarCozinhas
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaOutput salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
@@ -68,6 +73,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaOutputConverter.toModel(cozinhaService.salvar(cozinha));
     }
 
+    @PodeEditarCozinhas
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaOutput atualizar(@PathVariable Long id, @RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinhaEncontrada = cozinhaService.buscarOuFalhar(id);

@@ -17,6 +17,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -40,6 +41,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<CozinhaOutput> listar(@PageableDefault(size = 2) Pageable pageable) {
 
@@ -51,12 +53,14 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaOutputPagedModel;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaOutput buscarPeloId(@PathVariable Long id) {
         Cozinha cozinha = cozinhaService.buscarOuFalhar(id);
         return cozinhaOutputConverter.toModel(cozinha);
     }
 
+    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaOutput salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {

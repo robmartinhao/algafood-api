@@ -18,6 +18,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,7 +46,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<CozinhaOutput> listar(@PageableDefault(size = 2) Pageable pageable) {
-
+        //System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 
         PagedModel<CozinhaOutput> cozinhaOutputPagedModel = pagedResourcesAssembler

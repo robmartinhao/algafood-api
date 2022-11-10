@@ -18,7 +18,6 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -64,7 +63,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     }
 
 //    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
-    @CheckSecurity.Cozinhas.PodeEditar
+    @CheckSecurity.Cozinhas.PodeGerenciarCadastro
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaOutput salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
@@ -72,7 +71,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaOutputConverter.toModel(cozinhaService.salvar(cozinha));
     }
 
-    @CheckSecurity.Cozinhas.PodeEditar
+    @CheckSecurity.Cozinhas.PodeGerenciarCadastro
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaOutput atualizar(@PathVariable Long id, @RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinhaEncontrada = cozinhaService.buscarOuFalhar(id);

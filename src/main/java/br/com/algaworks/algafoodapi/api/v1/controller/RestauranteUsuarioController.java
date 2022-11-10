@@ -27,7 +27,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
     @Autowired
     private AlgaLinks algaLinks;
 
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioOutput> listar(@PathVariable Long restauranteId) {
@@ -46,7 +46,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
         return usuariosModel;
     }
 
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @Override
     @PutMapping(value = "/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -55,7 +55,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
         return ResponseEntity.noContent().build();
     }
 
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @Override
     @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

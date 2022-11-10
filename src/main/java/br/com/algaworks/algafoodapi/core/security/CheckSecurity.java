@@ -13,7 +13,7 @@ public @interface CheckSecurity {
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_COZINHAS')")
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
-        @interface PodeEditar {
+        @interface PodeGerenciarCadastro {
 
         }
 
@@ -28,7 +28,7 @@ public @interface CheckSecurity {
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES')")
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
-        @interface PodeEditar {
+        @interface PodeGerenciarCadastro {
 
         }
 

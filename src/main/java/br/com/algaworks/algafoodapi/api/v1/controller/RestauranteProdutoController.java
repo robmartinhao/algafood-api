@@ -66,7 +66,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoOutputConverter.toModel(produto);
     }
 
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoOutput salvar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoInput produtoInput) {
@@ -77,7 +77,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoOutputConverter.toModel(produtoService.salvar(produto));
     }
 
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PutMapping(value = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoOutput atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoInput produtoInput) {
         Produto produtoEncontrado = produtoService.buscarOuFalhar(restauranteId, produtoId);

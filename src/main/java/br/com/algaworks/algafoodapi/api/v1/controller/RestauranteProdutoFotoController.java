@@ -4,6 +4,7 @@ import br.com.algaworks.algafoodapi.api.v1.converter.output.FotoProdutoOutputCon
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.FotoProdutoInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.FotoProdutoOutput;
 import br.com.algaworks.algafoodapi.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
+import br.com.algaworks.algafoodapi.core.security.CheckSecurity;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.FotoProduto;
 import br.com.algaworks.algafoodapi.domain.service.CatalogoFotoProdutoService;
@@ -39,6 +40,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     @Autowired
     private FotoProdutoOutputConverter fotoProdutoOutputConverter;
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoOutput atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                            @Valid FotoProdutoInput fotoProdutoInput,
@@ -57,6 +59,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         return fotoProdutoOutputConverter.toModel(fotoSalva);
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> excluir(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
@@ -64,6 +67,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoOutput pesquisar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         FotoProduto fotoEncontrada = catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);

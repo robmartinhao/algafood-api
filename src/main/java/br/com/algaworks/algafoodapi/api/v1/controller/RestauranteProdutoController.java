@@ -6,6 +6,7 @@ import br.com.algaworks.algafoodapi.api.v1.converter.output.ProdutoOutputConvert
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.ProdutoInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.ProdutoOutput;
 import br.com.algaworks.algafoodapi.api.v1.openapi.controller.RestauranteProdutoControllerOpenApi;
+import br.com.algaworks.algafoodapi.core.security.CheckSecurity;
 import br.com.algaworks.algafoodapi.domain.model.Produto;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import br.com.algaworks.algafoodapi.domain.repository.ProdutoRepository;
@@ -42,6 +43,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @Autowired
     private AlgaLinks algaLinks;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<ProdutoOutput> listar(@PathVariable Long restauranteId, @RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
@@ -56,6 +58,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
                 .add(algaLinks.linkToProdutos(restauranteId));
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(value = "/{produtoId}")
     public ProdutoOutput buscarPeloId(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         Produto produto = produtoService.buscarOuFalhar(restauranteId, produtoId);
@@ -63,6 +66,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoOutputConverter.toModel(produto);
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoOutput salvar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoInput produtoInput) {
@@ -73,6 +77,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoOutputConverter.toModel(produtoService.salvar(produto));
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping(value = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProdutoOutput atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoInput produtoInput) {
         Produto produtoEncontrado = produtoService.buscarOuFalhar(restauranteId, produtoId);

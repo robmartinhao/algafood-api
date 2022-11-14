@@ -75,6 +75,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 //        return pedidosWrapper;
 //    }
 
+    @CheckSecurity.Pedidos.PodePesquisar
     @GetMapping
     public PagedModel<PedidoResumoOutput> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
         Pageable pageableTraduzido = traduzirPageable(pageable);

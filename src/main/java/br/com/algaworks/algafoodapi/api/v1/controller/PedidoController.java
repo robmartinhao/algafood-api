@@ -92,6 +92,7 @@ public class PedidoController implements PedidoControllerOpenApi {
         return pedidoOutputConverter.toModel(emissaoPedidoService.buscarOuFalhar(codigoPedido));
     }
 
+    @CheckSecurity.Pedidos.PodeCriar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoOutput salvar(@RequestBody @Valid PedidoInput pedidoInput) {

@@ -2,6 +2,7 @@ package br.com.algaworks.algafoodapi.api.v1.controller;
 
 import br.com.algaworks.algafoodapi.api.v1.AlgaLinks;
 import br.com.algaworks.algafoodapi.api.v1.openapi.controller.EstatisticasControllerOpenApi;
+import br.com.algaworks.algafoodapi.core.security.CheckSecurity;
 import br.com.algaworks.algafoodapi.domain.filter.VendaDiariaFilter;
 import br.com.algaworks.algafoodapi.domain.model.dto.VendaDiaria;
 import br.com.algaworks.algafoodapi.domain.service.VendaQueryService;
@@ -31,11 +32,13 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     @Autowired
     private AlgaLinks algaLinks;
 
+    @CheckSecurity.Estatistica.PodeConsultar
     @GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
         return vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
     }
 
+    @CheckSecurity.Estatistica.PodeConsultar
     @GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
         byte[] bytesPdf = vendaReportService.emitirVendasDiarias(filtro, timeOffset);

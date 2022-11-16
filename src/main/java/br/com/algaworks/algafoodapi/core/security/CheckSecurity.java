@@ -147,4 +147,13 @@ public @interface CheckSecurity {
         @interface PodeEditar {
         }
     }
+
+    @interface Estatistica {
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('GERAR_RELATORIOS')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface PodeConsultar {
+        }
+    }
 }

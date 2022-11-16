@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.v1.controller;
 import br.com.algaworks.algafoodapi.api.v1.converter.output.PermissaoOutputConverter;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.PermissaoOutput;
 import br.com.algaworks.algafoodapi.api.v1.openapi.controller.PermissaoControllerOpenApi;
+import br.com.algaworks.algafoodapi.core.security.CheckSecurity;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import br.com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.model.Permissao;
@@ -30,11 +31,13 @@ public class PermissaoController implements PermissaoControllerOpenApi {
     @Autowired
     private PermissaoOutputConverter permissaoOutputConverter;
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<PermissaoOutput> listar() {
         return permissaoOutputConverter.toCollectionModel(permissaoRepository.findAll());
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping("/{id}")
     public ResponseEntity<Permissao> buscarPeloId(@PathVariable Long id) {
         Optional<Permissao> permissaoEncontrada = permissaoRepository.findById(id);
@@ -44,12 +47,14 @@ public class PermissaoController implements PermissaoControllerOpenApi {
         return ResponseEntity.notFound().build();
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Permissao salvar(@RequestBody Permissao permissao) {
         return permissaoService.salvar(permissao);
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{id}")
     public ResponseEntity<Permissao> atualizar(@PathVariable Long id, @RequestBody Permissao permissao) {
         Optional<Permissao> permissaoEncontrada = permissaoRepository.findById(id);
@@ -62,6 +67,7 @@ public class PermissaoController implements PermissaoControllerOpenApi {
         return ResponseEntity.notFound().build();
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{id}")
     public ResponseEntity<Permissao> remover(@PathVariable Long id) {
         try {

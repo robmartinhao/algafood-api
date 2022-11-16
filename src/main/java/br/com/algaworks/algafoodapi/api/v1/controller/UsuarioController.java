@@ -6,6 +6,7 @@ import br.com.algaworks.algafoodapi.api.v1.model.dto.input.SenhaInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.UsuarioComSenhaInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.UsuarioInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.UsuarioOutput;
+import br.com.algaworks.algafoodapi.core.security.CheckSecurity;
 import br.com.algaworks.algafoodapi.domain.model.Usuario;
 import br.com.algaworks.algafoodapi.domain.repository.UsuarioRepository;
 import br.com.algaworks.algafoodapi.domain.service.UsuarioService;
@@ -33,11 +34,13 @@ public class UsuarioController {
     @Autowired
     private UsuarioDomainConverter usuarioDomainConverter;
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioOutput> listar() {
         return usuarioOutputConverter.toCollectionModel(usuarioRepository.findAll());
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UsuarioOutput buscarPeloId(@PathVariable Long id) {
         return usuarioOutputConverter.toModel(usuarioService.buscarOuFalhar(id));
@@ -50,23 +53,26 @@ public class UsuarioController {
         return usuarioOutputConverter.toModel(usuarioService.salvar(usuario));
     }
 
-    @PutMapping("/{id}")
-    public UsuarioOutput atualizar(@PathVariable Long id, @RequestBody @Valid UsuarioInput usuarioInput) {
-        Usuario usuarioEncontrado = usuarioService.buscarOuFalhar(id);
+    @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarUsuario
+    @PutMapping("/{usuarioId}")
+    public UsuarioOutput atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioInput usuarioInput) {
+        Usuario usuarioEncontrado = usuarioService.buscarOuFalhar(usuarioId);
         usuarioDomainConverter.copyToDomainObject(usuarioInput, usuarioEncontrado);
 
         return usuarioOutputConverter.toModel(usuarioService.salvar(usuarioEncontrado));
     }
 
-    @DeleteMapping("/{id}")
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
+    @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long id) {
-        usuarioService.excluir(id);
+    public void remover(@PathVariable Long usuarioId) {
+        usuarioService.excluir(usuarioId);
     }
 
-    @PutMapping("/{id}/senha")
+    @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarPropriaSenha
+    @PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizarSenha(@PathVariable Long id, @RequestBody @Valid SenhaInput senhaInput) {
-          usuarioService.alterarSenha(id, senhaInput.getSenhaAtual(), senhaInput.getNovaSenha());
+    public void atualizarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senhaInput) {
+          usuarioService.alterarSenha(usuarioId, senhaInput.getSenhaAtual(), senhaInput.getNovaSenha());
     }
 }

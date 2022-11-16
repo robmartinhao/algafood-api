@@ -5,6 +5,7 @@ import br.com.algaworks.algafoodapi.api.v1.converter.output.FormaPagamentoOutput
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.FormaPagamentoInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.FormaPagamentoOutput;
 import br.com.algaworks.algafoodapi.api.v1.openapi.controller.FormaPagamentoControllerOpenApi;
+import br.com.algaworks.algafoodapi.core.security.CheckSecurity;
 import br.com.algaworks.algafoodapi.domain.exception.FormaDePagamentoNaoEncontradaException;
 import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.model.FormaPagamento;
@@ -40,6 +41,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     @Autowired
     private FormaPagamentoDomainConverter formaPagamentoDomainConverter;
 
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CollectionModel<FormaPagamentoOutput>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -64,6 +66,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
                 .body(formasPagamentoOutput);
     }
 
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FormaPagamentoOutput> buscarPeloId(@PathVariable Long id, ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -88,6 +91,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
                 .body(formaPagamentoOutput);
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoOutput salvar(@Valid @RequestBody FormaPagamentoInput formaPagamentoInput) {
@@ -95,6 +99,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         return formaPagamentoOutputConverter.toModel(formaPagamentoService.salvar(formaPagamento));
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PutMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public FormaPagamentoOutput atualizar(@PathVariable Long id, @RequestBody FormaPagamentoInput formaPagamentoInput) {
         try {
@@ -107,9 +112,9 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         } catch (FormaDePagamentoNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
-
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> remover(@PathVariable Long id) {

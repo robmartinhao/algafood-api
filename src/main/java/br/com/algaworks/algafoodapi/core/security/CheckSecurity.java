@@ -3,7 +3,6 @@ package br.com.algaworks.algafoodapi.core.security;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -76,6 +75,20 @@ public @interface CheckSecurity {
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeCriar {
+        }
+    }
+
+    @interface FormasPagamento {
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface PodeConsultar {
+        }
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_FORMAS_PAGAMENTO')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface PodeEditar {
         }
     }
 }

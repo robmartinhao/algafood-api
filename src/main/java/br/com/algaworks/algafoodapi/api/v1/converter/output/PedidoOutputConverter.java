@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.v1.converter.output;
 import br.com.algaworks.algafoodapi.api.v1.AlgaLinks;
 import br.com.algaworks.algafoodapi.api.v1.controller.PedidoController;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.PedidoOutput;
+import br.com.algaworks.algafoodapi.core.security.AlgaSecurity;
 import br.com.algaworks.algafoodapi.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class PedidoOutputConverter extends RepresentationModelAssemblerSupport<P
     @Autowired
     private AlgaLinks algaLinks;
 
+    @Autowired
+    private AlgaSecurity algaSecurity;
+
     @Override
     public PedidoOutput toModel(Pedido pedido) {
         PedidoOutput pedidoModelOutput = createModelWithId(pedido.getCodigo(), pedido);
@@ -29,14 +33,16 @@ public class PedidoOutputConverter extends RepresentationModelAssemblerSupport<P
 
         pedidoModelOutput.add(algaLinks.linkToPedidos("pedidos"));
 
-        if (pedido.podeSerConfirmado()) {
-            pedidoModelOutput.add(algaLinks.linkToConfirmarPedido(pedido.getCodigo(), "confirmar"));
-        }
-        if (pedido.podeSerEntregue()) {
-            pedidoModelOutput.add(algaLinks.linkToEntregarPedido(pedido.getCodigo(), "entregar"));
-        }
-        if (pedido.podeSerCancelado()) {
-            pedidoModelOutput.add(algaLinks.linkToCancelarPedido(pedido.getCodigo(), "cancelar"));
+        if (algaSecurity.podeGerenciarPedidos(pedido.getCodigo())) {
+            if (pedido.podeSerConfirmado()) {
+                pedidoModelOutput.add(algaLinks.linkToConfirmarPedido(pedido.getCodigo(), "confirmar"));
+            }
+            if (pedido.podeSerEntregue()) {
+                pedidoModelOutput.add(algaLinks.linkToEntregarPedido(pedido.getCodigo(), "entregar"));
+            }
+            if (pedido.podeSerCancelado()) {
+                pedidoModelOutput.add(algaLinks.linkToCancelarPedido(pedido.getCodigo(), "cancelar"));
+            }
         }
         pedidoModelOutput.getRestaurante().add(
                 algaLinks.linkToRestaurante(pedido.getRestaurante().getId()));

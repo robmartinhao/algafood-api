@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.v1.converter.output;
 import br.com.algaworks.algafoodapi.api.v1.AlgaLinks;
 import br.com.algaworks.algafoodapi.api.v1.controller.RestauranteController;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.RestauranteBasicoOutput;
+import br.com.algaworks.algafoodapi.core.security.AlgaSecurity;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class RestauranteBasicoOutputConverter
     @Autowired
     private AlgaLinks algaLinks;
 
+    @Autowired
+    private AlgaSecurity algaSecurity;
+
     public RestauranteBasicoOutputConverter() {
         super(RestauranteController.class, RestauranteBasicoOutput.class);
     }
@@ -30,18 +34,24 @@ public class RestauranteBasicoOutputConverter
                 restaurante.getId(), restaurante);
 
         modelMapper.map(restaurante, restauranteModel);
+        if (algaSecurity.podeConsultarRestaurantes()) {
 
-        restauranteModel.add(algaLinks.linkToRestaurantes("restaurantes"));
+            restauranteModel.add(algaLinks.linkToRestaurantes("restaurantes"));
+        }
+        if (algaSecurity.podeConsultarCozinhas()) {
 
-        restauranteModel.getCozinha().add(
-                algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
-
+            restauranteModel.getCozinha().add(
+                    algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
+        }
         return restauranteModel;
     }
 
     @Override
     public CollectionModel<RestauranteBasicoOutput> toCollectionModel(Iterable<? extends Restaurante> entities) {
-        return super.toCollectionModel(entities)
-                .add(algaLinks.linkToRestaurantes());
+        CollectionModel<RestauranteBasicoOutput> collectionModel = super.toCollectionModel(entities);
+        if (algaSecurity.podeConsultarRestaurantes()) {
+            collectionModel.add(algaLinks.linkToRestaurantes());
+        }
+        return collectionModel;
     }
 }

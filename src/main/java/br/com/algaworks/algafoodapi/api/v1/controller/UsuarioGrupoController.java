@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.v1.controller;
 import br.com.algaworks.algafoodapi.api.v1.AlgaLinks;
 import br.com.algaworks.algafoodapi.api.v1.converter.output.GrupoOutputConverter;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.GrupoOutput;
+import br.com.algaworks.algafoodapi.core.security.AlgaSecurity;
 import br.com.algaworks.algafoodapi.core.security.CheckSecurity;
 import br.com.algaworks.algafoodapi.domain.model.Usuario;
 import br.com.algaworks.algafoodapi.domain.service.UsuarioService;
@@ -26,21 +27,26 @@ public class UsuarioGrupoController {
     @Autowired
     private AlgaLinks algaLinks;
 
+    @Autowired
+    private AlgaSecurity algaSecurity;
+
     @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<GrupoOutput> listar(@PathVariable Long usuarioId) {
         Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
 
-        CollectionModel<GrupoOutput> gruposOutput = grupoOutputConverter.toCollectionModel(usuario.getGrupos())
-                .removeLinks()
-                .add(algaLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
+        CollectionModel<GrupoOutput> gruposModel = grupoOutputConverter.toCollectionModel(usuario.getGrupos())
+                .removeLinks();
 
-        gruposOutput.getContent().forEach(grupoModel -> {
-            grupoModel.add(algaLinks.linkToUsuarioGrupoDesassociacao(
-                    usuarioId, grupoModel.getId(), "desassociar"));
-        });
+        if (algaSecurity.podeEditarUsuariosGruposPermissoes()) {
+            gruposModel.add(algaLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
 
-        return gruposOutput;
+            gruposModel.getContent().forEach(grupoModel -> {
+                grupoModel.add(algaLinks.linkToUsuarioGrupoDesassociacao(
+                        usuarioId, grupoModel.getId(), "desassociar"));
+            });
+        }
+        return gruposModel;
     }
 
     @CheckSecurity.UsuariosGruposPermissoes.PodeEditar

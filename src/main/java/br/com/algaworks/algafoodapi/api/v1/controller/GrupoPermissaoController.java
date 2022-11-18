@@ -4,6 +4,7 @@ import br.com.algaworks.algafoodapi.api.v1.AlgaLinks;
 import br.com.algaworks.algafoodapi.api.v1.converter.output.PermissaoOutputConverter;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.PermissaoOutput;
 import br.com.algaworks.algafoodapi.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
+import br.com.algaworks.algafoodapi.core.security.AlgaSecurity;
 import br.com.algaworks.algafoodapi.core.security.CheckSecurity;
 import br.com.algaworks.algafoodapi.domain.model.Grupo;
 import br.com.algaworks.algafoodapi.domain.service.GrupoService;
@@ -26,23 +27,30 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     @Autowired
     private AlgaLinks algaLinks;
 
+    @Autowired
+    private AlgaSecurity algaSecurity;
+
     @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
     @GetMapping
     public CollectionModel<PermissaoOutput> listar(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarOuFalhar(grupoId);
 
-        CollectionModel<PermissaoOutput> permissoesModel
+        CollectionModel<PermissaoOutput> permissoesOutput
                 = permissaoOutputConverter.toCollectionModel(grupo.getPermissoes())
-                .removeLinks()
-                .add(algaLinks.linkToGrupoPermissoes(grupoId))
-                .add(algaLinks.linkToGrupoPermissaoAssociacao(grupoId, "adicionar"));
+                .removeLinks();
 
-        permissoesModel.getContent().forEach(permissaoModel -> {
-            permissaoModel.add(algaLinks.linkToGrupoPermissaoDesassociacao(
-                    grupoId, permissaoModel.getId(), "remover"));
-        });
-        return permissoesModel;
+        permissoesOutput.add(algaLinks.linkToGrupoPermissoes(grupoId));
+
+        if (algaSecurity.podeEditarUsuariosGruposPermissoes()) {
+            permissoesOutput.add(algaLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
+
+            permissoesOutput.getContent().forEach(permissaoOutput -> {
+                permissaoOutput.add(algaLinks.linkToGrupoPermissaoDesassociacao(
+                        grupoId, permissaoOutput.getId(), "desassociar"));
+            });
+        }
+        return permissoesOutput;
     }
 
     @CheckSecurity.UsuariosGruposPermissoes.PodeEditar

@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.v1.converter.output;
 import br.com.algaworks.algafoodapi.api.v1.AlgaLinks;
 import br.com.algaworks.algafoodapi.api.v1.controller.CidadeController;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.CidadeOutput;
+import br.com.algaworks.algafoodapi.core.security.AlgaSecurity;
 import br.com.algaworks.algafoodapi.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class CidadeOutputConverter extends RepresentationModelAssemblerSupport<C
     @Autowired
     private AlgaLinks algaLinks;
 
+    @Autowired
+    private AlgaSecurity algaSecurity;
+
     public CidadeOutputConverter() {
         super(CidadeController.class, CidadeOutput.class);
     }
@@ -32,9 +36,12 @@ public class CidadeOutputConverter extends RepresentationModelAssemblerSupport<C
 
         modelMapper.map(cidade, cidadeModelOutput);
 
-        cidadeModelOutput.add(algaLinks.linkToCidades("cidades"));
-        cidadeModelOutput.getEstado().add(algaLinks.linkToEstado(cidadeModelOutput.getEstado().getId()));
-
+        if (algaSecurity.podeConsultarCidades()) {
+            cidadeModelOutput.add(algaLinks.linkToCidades("cidades"));
+        }
+        if (algaSecurity.podeConsultarEstados()) {
+            cidadeModelOutput.getEstado().add(algaLinks.linkToEstado(cidadeModelOutput.getEstado().getId()));
+        }
         return cidadeModelOutput;
     }
 

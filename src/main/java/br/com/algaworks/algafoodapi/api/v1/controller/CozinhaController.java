@@ -63,7 +63,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     }
 
 //    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
-    @CheckSecurity.Cozinhas.PodeGerenciarCadastro
+    @CheckSecurity.Cozinhas.PodeEditar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaOutput salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
@@ -71,7 +71,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaOutputConverter.toModel(cozinhaService.salvar(cozinha));
     }
 
-    @CheckSecurity.Cozinhas.PodeGerenciarCadastro
+    @CheckSecurity.Cozinhas.PodeEditar
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CozinhaOutput atualizar(@PathVariable Long id, @RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinhaEncontrada = cozinhaService.buscarOuFalhar(id);

@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.v1.converter.output;
 import br.com.algaworks.algafoodapi.api.v1.AlgaLinks;
 import br.com.algaworks.algafoodapi.api.v1.controller.UsuarioController;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.UsuarioOutput;
+import br.com.algaworks.algafoodapi.core.security.AlgaSecurity;
 import br.com.algaworks.algafoodapi.domain.model.Usuario;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class UsuarioOutputConverter extends RepresentationModelAssemblerSupport<
     @Autowired
     private AlgaLinks algaLinks;
 
+    @Autowired
+    private AlgaSecurity algaSecurity;
+
     public UsuarioOutputConverter() {
         super(UsuarioController.class, UsuarioOutput.class);
     }
@@ -31,10 +35,11 @@ public class UsuarioOutputConverter extends RepresentationModelAssemblerSupport<
 
         modelMapper.map(usuario, usuarioModelOutput);
 
-        usuarioModelOutput.add(algaLinks.linkToUsuarios("usuarios"));
+        if (algaSecurity.podeConsultarUsuariosGruposPermissoes()) {
+            usuarioModelOutput.add(algaLinks.linkToUsuarios("usuarios"));
 
-        usuarioModelOutput.add(algaLinks.linkToGruposUsuario(usuario.getId(), "grupos-usuarios"));
-
+            usuarioModelOutput.add(algaLinks.linkToGruposUsuario(usuario.getId(), "grupos-usuarios"));
+        }
         return usuarioModelOutput;
     }
 

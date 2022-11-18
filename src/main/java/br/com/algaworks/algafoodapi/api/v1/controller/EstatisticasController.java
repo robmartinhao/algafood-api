@@ -32,13 +32,13 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     @Autowired
     private AlgaLinks algaLinks;
 
-    @CheckSecurity.Estatistica.PodeConsultar
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
         return vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
     }
 
-    @CheckSecurity.Estatistica.PodeConsultar
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
         byte[] bytesPdf = vendaReportService.emitirVendasDiarias(filtro, timeOffset);

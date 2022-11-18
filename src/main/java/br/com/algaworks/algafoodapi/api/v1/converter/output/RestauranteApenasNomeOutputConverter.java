@@ -3,6 +3,7 @@ package br.com.algaworks.algafoodapi.api.v1.converter.output;
 import br.com.algaworks.algafoodapi.api.v1.AlgaLinks;
 import br.com.algaworks.algafoodapi.api.v1.controller.RestauranteController;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.RestauranteApenasNomeOutput;
+import br.com.algaworks.algafoodapi.core.security.AlgaSecurity;
 import br.com.algaworks.algafoodapi.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class RestauranteApenasNomeOutputConverter
     @Autowired
     private AlgaLinks algaLinks;
 
+    @Autowired
+    private AlgaSecurity algaSecurity;
+
     public RestauranteApenasNomeOutputConverter() {
         super(RestauranteController.class, RestauranteApenasNomeOutput.class);
     }
@@ -31,14 +35,18 @@ public class RestauranteApenasNomeOutputConverter
 
         modelMapper.map(restaurante, restauranteApenasNomeOutput);
 
-        restauranteApenasNomeOutput.add(algaLinks.linkToRestaurantes("restaurantes"));
-
+        if (algaSecurity.podeConsultarRestaurantes()) {
+            restauranteApenasNomeOutput.add(algaLinks.linkToRestaurantes("restaurantes"));
+        }
         return restauranteApenasNomeOutput;
     }
 
     @Override
     public CollectionModel<RestauranteApenasNomeOutput> toCollectionModel(Iterable<? extends Restaurante> entities) {
-        return super.toCollectionModel(entities)
-                .add(algaLinks.linkToRestaurantes());
+        CollectionModel<RestauranteApenasNomeOutput> collectionModel = super.toCollectionModel(entities);
+        if (algaSecurity.podeConsultarRestaurantes()) {
+            collectionModel.add(algaLinks.linkToRestaurantes());
+        }
+        return collectionModel;
     }
 }

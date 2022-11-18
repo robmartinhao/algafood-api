@@ -31,7 +31,9 @@ public class PedidoOutputConverter extends RepresentationModelAssemblerSupport<P
         PedidoOutput pedidoModelOutput = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModelOutput);
 
-        pedidoModelOutput.add(algaLinks.linkToPedidos("pedidos"));
+        if (algaSecurity.podePesquisarPedidos()) {
+            pedidoModelOutput.add(algaLinks.linkToPedidos("pedidos"));
+        }
 
         if (algaSecurity.podeGerenciarPedidos(pedido.getCodigo())) {
             if (pedido.podeSerConfirmado()) {
@@ -44,23 +46,30 @@ public class PedidoOutputConverter extends RepresentationModelAssemblerSupport<P
                 pedidoModelOutput.add(algaLinks.linkToCancelarPedido(pedido.getCodigo(), "cancelar"));
             }
         }
-        pedidoModelOutput.getRestaurante().add(
-                algaLinks.linkToRestaurante(pedido.getRestaurante().getId()));
 
-        pedidoModelOutput.getCliente().add(
-                algaLinks.linkToUsuario(pedido.getCliente().getId()));
+        if (algaSecurity.podeConsultarRestaurantes()) {
+            pedidoModelOutput.getRestaurante().add(
+                    algaLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+        }
 
-        pedidoModelOutput.getFormaPagamento().add(
-                algaLinks.linkToFormaPagamento(pedido.getFormaPagamento().getId()));
+        if (algaSecurity.podeConsultarUsuariosGruposPermissoes()) {
 
-        pedidoModelOutput.getEnderecoEntrega().getCidade().add(
-                algaLinks.linkToCidade(pedido.getEnderecoEntrega().getCidade().getId()));
+            pedidoModelOutput.getCliente().add(
+                    algaLinks.linkToUsuario(pedido.getCliente().getId()));
+        }
+        if (algaSecurity.podeConsultarFormasPagamento()) {
+            pedidoModelOutput.getFormaPagamento().add(
+                    algaLinks.linkToFormaPagamento(pedido.getFormaPagamento().getId()));
+        }
 
-        pedidoModelOutput.getItens().forEach(item -> {
-            item.add(algaLinks.linkToProduto(
-                    pedidoModelOutput.getRestaurante().getId(), item.getProdutoId(), "produto"));
-        });
-
+        if (algaSecurity.podeConsultarCidades()) {
+            pedidoModelOutput.getEnderecoEntrega().getCidade().add(
+                    algaLinks.linkToCidade(pedido.getEnderecoEntrega().getCidade().getId()));
+        }
+        if (algaSecurity.podeConsultarCidades()) {
+            pedidoModelOutput.getItens().forEach(item -> item.add(algaLinks.linkToProduto(
+                    pedidoModelOutput.getRestaurante().getId(), item.getProdutoId(), "produto")));
+        }
         return pedidoModelOutput;
     }
 }

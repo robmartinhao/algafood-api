@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties("algafood.email")
+//@ConfigurationProperties("algafood.email")
 public class EmailPropeties {
 
     @NotNull

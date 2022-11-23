@@ -9,6 +9,6 @@ COPY wait-for-it.sh /wait-for-it.sh
 
 RUN chmod +x /wait-for-it.sh
 
-EXPOSE 8088
+EXPOSE 8080
 
 CMD ["java", "-jar", "api.jar"]

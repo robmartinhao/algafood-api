@@ -8,10 +8,9 @@ services:
   algafood-mysql:
     image: mysql:5.7
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ROOT_PASSWORD: "devmysql"
     ports:
-      - "3306:3306"
+      - "13306:3306"
     networks:
       - algafood-network
 
@@ -22,6 +21,7 @@ services:
       DB_HOST: algafood-mysql
       SPRING_SESSION_STORE_TYPE: redis
       SPRING_REDIS_HOST: algafood-redis
+      SPRING_PROFILES_ACTIVE: development
     networks:
       - algafood-network
     depends_on:
@@ -31,7 +31,7 @@ services:
     build: ./nginx
     image: algafood-proxy
     ports:
-      - "80:80"
+      - "81:80"
     networks:
       - algafood-network
     depends_on:

@@ -18,7 +18,6 @@
         <modelmapper.version>3.0.0</modelmapper.version>
         <jasperreports.version>6.19.0</jasperreports.version>
         <aws-java-sdk-s3.version>1.12.186</aws-java-sdk-s3.version>
-        <springfox.version>3.0.0</springfox.version>
         <logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
         <spring-security-oauth2.version>2.3.8.RELEASE</spring-security-oauth2.version>
         <spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
@@ -112,16 +111,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-bean-validators</artifactId>
-            <version>${springfox.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

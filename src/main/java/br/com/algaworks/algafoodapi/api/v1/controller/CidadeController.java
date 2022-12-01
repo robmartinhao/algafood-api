@@ -12,7 +12,6 @@ import br.com.algaworks.algafoodapi.domain.exception.NegocioException;
 import br.com.algaworks.algafoodapi.domain.model.Cidade;
 import br.com.algaworks.algafoodapi.domain.repository.CidadeRepository;
 import br.com.algaworks.algafoodapi.domain.service.CidadeService;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -39,7 +38,6 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeDomainConverter cidadeDomainConverter;
 
     @CheckSecurity.Cidades.PodeConsultar
-    @ApiOperation("Lista as cidades")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeOutput> listar() {
         return cidadeOutputConverter.toCollectionModel(cidadeRepository.findAll());

@@ -26,4 +26,48 @@ public class SpringDocConfig {
                         .url("https://algaworks.com")
                 );
     }
+
+//    @Bean
+//    public GroupedOpenApi groupedOpenApi() {
+//        return GroupedOpenApi.builder()
+//                .group("AlgaFood API Admin")
+//                .pathsToMatch("/v1/**")
+//                .addOpenApiCustomiser(openApi -> {
+//                    openApi.info(new Info()
+//                            .title("AlgaFood API Admin")
+//                            .version("v1")
+//                            .description("REST API do AlgaFood")
+//                            .license(new License()
+//                                    .name("Apache 2.0")
+//                                    .url("http://springdoc.com")
+//                            )
+//                    ).externalDocs(new ExternalDocumentation()
+//                            .description("AlgaWorks")
+//                            .url("https://algaworks.com")
+//                    );
+//                })
+//                .build();
+//    }
+//
+//    @Bean
+//    public GroupedOpenApi groupedOpenApiCliente() {
+//        return GroupedOpenApi.builder()
+//                .group("AlgaFood API Cliente")
+//                .pathsToMatch("/cliente/v1/**")
+//                .addOpenApiCustomiser(openApi -> {
+//                    openApi.info(new Info()
+//                            .title("AlgaFood API Cliente")
+//                            .version("v1")
+//                            .description("REST API do AlgaFood")
+//                            .license(new License()
+//                                    .name("Apache 2.0")
+//                                    .url("http://springdoc.com")
+//                            )
+//                    ).externalDocs(new ExternalDocumentation()
+//                            .description("AlgaWorks")
+//                            .url("https://algaworks.com")
+//                    );
+//                })
+//                .build();
+//    }
 }

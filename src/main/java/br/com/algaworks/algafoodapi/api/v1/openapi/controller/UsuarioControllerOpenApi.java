@@ -4,10 +4,12 @@ import br.com.algaworks.algafoodapi.api.v1.model.dto.input.SenhaInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.UsuarioComSenhaInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.input.UsuarioInput;
 import br.com.algaworks.algafoodapi.api.v1.model.dto.output.UsuarioOutput;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+@SecurityRequirement(name = "security_auth")
 public interface UsuarioControllerOpenApi {
     List<UsuarioOutput> listar();
 

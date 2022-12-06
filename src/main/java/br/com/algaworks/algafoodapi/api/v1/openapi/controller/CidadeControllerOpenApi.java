@@ -23,17 +23,37 @@ public interface CidadeControllerOpenApi {
     @Operation(summary = "Busca uma cidade por Id", responses = {
             @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "400", description = "ID da cidade inválido",
-            content = @Content(schema = @Schema(ref = "Problema")))
+                    content = @Content(schema = @Schema(ref = "Problema"))),
+            @ApiResponse(responseCode = "404", description = "Cidade não encontrada",
+                    content = @Content(schema = @Schema(ref = "Problema"))
+            )
     })
     CidadeOutput buscarPeloId(@Parameter(description = "ID de uma cidade", example = "1", required = true) Long id);
 
     @Operation(summary = "Cadastra uma cidade", description = "Cadastro de uma cidade, necessita de um estado e nome válido")
     CidadeOutput salvar(@RequestBody(description = "Representação de uma nova cidade", required = true) CidadeInput cidadeInput);
 
-    @Operation(summary = "Atualiza uma cidade por Id")
+    @Operation(summary = "Atualiza uma cidade por Id",
+            responses = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "400", description = "ID da cidade inválido",
+                            content = @Content(schema = @Schema(ref = "Problema"))
+                    ),
+                    @ApiResponse(responseCode = "404", description = "Cidade não encontrada",
+                            content = @Content(schema = @Schema(ref = "Problema"))
+                    )
+            })
     CidadeOutput atualizar(@Parameter(description = "ID de uma cidade", example = "1", required = true) Long id,
                            @RequestBody(description = "Representação de uma cidade com dados atualizados", required = true) CidadeInput cidadeInput);
 
-    @Operation(summary = "Exclui uma cidade por Id")
+    @Operation(summary = "Exclui uma cidade por Id",responses = {
+            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "400", description = "ID da cidade inválido",
+                    content = @Content(schema = @Schema(ref = "Problema"))
+            ),
+            @ApiResponse(responseCode = "404", description = "Cidade não encontrada",
+                    content = @Content(schema = @Schema(ref = "Problema"))
+            )
+    })
     ResponseEntity<Void> remover(@Parameter(description = "ID de uma cidade", example = "1", required = true) Long id);
 }

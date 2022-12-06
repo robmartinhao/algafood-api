@@ -12,11 +12,12 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class CidadeInput {
 
-    @Schema(example = "Uberlândia")
+    @Schema(example = "Uberlândia"/*, required = true*/)
     @NotBlank
     private String nome;
 
 
+//    @Schema(required = true)
     @Valid
     @NotNull
     private EstadoIdInput estado;

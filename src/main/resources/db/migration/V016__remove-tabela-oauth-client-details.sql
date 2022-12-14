@@ -1,1 +1,1 @@
-DROP table oauth_client_details;
+# DROP table oauth_client_details;

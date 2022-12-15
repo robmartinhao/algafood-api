@@ -3,7 +3,7 @@ package br.com.algaworks.algafoodapi.api.v1.model.dto.input;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 

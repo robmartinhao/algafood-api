@@ -1,13 +1,11 @@
 package br.com.algaworks.algafoodapi.domain.model;
 
-import br.com.algaworks.algafoodapi.core.validation.Groups;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -5,12 +5,11 @@ import br.com.algaworks.algafoodapi.domain.model.Pedido;
 import br.com.algaworks.algafoodapi.domain.model.StatusPedido;
 import br.com.algaworks.algafoodapi.domain.model.dto.VendaDiaria;
 import br.com.algaworks.algafoodapi.domain.service.VendaQueryService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +40,7 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 
         var predicates = new ArrayList<Predicate>();
         if (filtro.getRestauranteId() != null) {
-            predicates.add(builder.equal(root.get("restaurante"), filtro.getRestauranteId()));
+            predicates.add(builder.equal(root.get("restaurante").get("id"), filtro.getRestauranteId()));
         }
         if (filtro.getDataCriacaoInicio() != null) {
             predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), filtro.getDataCriacaoInicio()));

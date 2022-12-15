@@ -4,11 +4,11 @@ import br.com.algaworks.algafoodapi.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.groups.ConvertGroup;
+import jakarta.validation.groups.Default;
 
 
 @Entity

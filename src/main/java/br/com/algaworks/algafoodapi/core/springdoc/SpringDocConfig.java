@@ -43,7 +43,7 @@ public class SpringDocConfig {
     private static final String badRequestResponse = "BadRequestResponse";
     private static final String notFoundResponse = "NotFoundResponse";
     private static final String notAcceptableResponse = "NotAcceptableResponse";
-    private static final String internalServerError = "InternalServerError";
+    private static final String internalServerError = "InternalServerErrorResponse";
 
     @Bean
     public OpenAPI openAPI() {

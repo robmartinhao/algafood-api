@@ -16,7 +16,7 @@ public class JdbcOAuth2AuthorizationQueryService implements OAuth2AuthorizationQ
     private final RowMapper<RegisteredClient> registeredClientRowMapper;
     private final RowMapper<OAuth2Authorization> oAuth2AuthorizationRowMapper;
 
-    private final String LIST_AUTHORIZED_CLIENTS = "select * from oauth2_authorization_consent c " +
+    private final String LIST_AUTHORIZED_CLIENTS = "select rc.* from oauth2_authorization_consent c " +
             "inner join oauth2_registered_client rc on rc.id = c.registered_client_id " +
             "where c.principal_name = ? ";
 

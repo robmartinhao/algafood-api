@@ -51,7 +51,7 @@ public class CozinhaControllerTestsIT {
     }
 
     @Test
-    public void deveRetornarStatus200_QaundoConsultarCozinha() {
+    public void deveRetornarStatus200_QuandoConsultarCozinha() {
         enableLoggingOfRequestAndResponseIfValidationFails();
         given()
             .pathParam("cozinhaId", cozinhaAmericana.getId())
